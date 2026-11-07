@@ -13,13 +13,14 @@ Run from marketing/offboard-film:  python3 -I scripts/prepare-audio.py
 Writes public/audio/ (Git-ignored) and src/data/audio.json.
 """
 import json
+import os
 import pathlib
 import re
 import subprocess
 
 FILM = pathlib.Path(__file__).resolve().parents[1]
 VO_SRC = FILM.parent / "voiceovers"
-BEAT = pathlib.Path("/Users/mac/work/web3/sui/parius/marketing/audio/beat.mp3")
+BEAT = pathlib.Path(os.environ.get("OFFBOARD_FILM_MUSIC", str(FILM.parent / "audio/beat.mp3"))).expanduser()
 OUT = FILM / "public/audio"
 (OUT / "vo").mkdir(parents=True, exist_ok=True)
 

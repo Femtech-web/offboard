@@ -1,9 +1,10 @@
 ---
 title: "Building Offboard: removing access left behind when someone leaves"
-published: false
+published: true
 description: "How I built a Switch workflow where Codex investigates GitHub access, a human approves removal, and a separate check verifies the result."
 tags: security, ai, webdev, opensource
 ai_disclosure_level: some_ai
+canonical_url: https://dev.to/adeyemi_femi_f6878f7b8276/building-offboard-removing-access-left-behind-when-someone-leaves-1mbj
 ---
 
 After leaving a team, I still had access to its GitHub, Apple, and Vercel accounts. I could still see new code updates after my work there had ended.

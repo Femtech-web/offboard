@@ -16,6 +16,9 @@
 !.env.switch.example
 /.local/
 
+# Owner-supplied soundtrack; not redistributed with the film source.
+/marketing/audio/
+
 # Operating system and tooling
 .DS_Store
 *.log

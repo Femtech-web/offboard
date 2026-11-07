@@ -6,7 +6,7 @@
 
 Offboard helps founders, engineering leads, and IT teams find and remove access left behind when someone leaves. A Codex agent investigates with your team in Switch. A human approves the exact change. A fresh provider check verifies the result.
 
-[Live app](https://offboard-mu.vercel.app) · [How we use Switch](#how-we-use-switch) · [Run locally](#run-locally) · [Build story](docs/blog/offboard-with-switch.md)
+[Live app](https://offboard-mu.vercel.app) · [Demo video](https://youtu.be/ozrkW6IDafw) · [GitHub run](docs/github-run.md) · [Run locally](#run-locally) · [Blog](https://dev.to/adeyemi_femi_f6878f7b8276/building-offboard-removing-access-left-behind-when-someone-leaves-1mbj)
 
 ## Why Offboard
 
@@ -18,13 +18,15 @@ The first connector supports GitHub organization membership and outside-collabor
 
 ## For judges
 
-- **See the product:** [sign in to Offboard](https://offboard-mu.vercel.app/sign-in) with **`test@user.com`** and password **`Password`**. This read-only demo account shows the controlled case and its saved reports.
-- **Follow the workflow:** a human request in the Switch-connected Mattermost room leads to a real GitHub investigation, a private approval email, human approval, removal, an independent check, and the agent’s reply in the same thread.
+- **Watch the workflow:** the [2:34 demo](https://youtu.be/ozrkW6IDafw) follows the Switch investigation, private email review, human-approved GitHub removal, independent verification, and the agent’s reply in the same thread.
+- **Try the dashboard:** [sign in to Offboard](https://offboard-mu.vercel.app/sign-in) with **`test@user.com`** and password **`Password`**. This read-only demo account shows the controlled case and its saved reports.
 - **Inspect the result:** read the [GitHub run, step by step](docs/github-run.md), including the real Switch conversation, human decision, provider response, and both verification results. No sign-in is needed for the walkthrough.
 
-The complete controlled GitHub journey passed on 7 November 2026. GitHub accepted the removal, the immediate check still found access, and a separate read-only follow-up confirmed the membership absent. Both reports are retained. A later investigation also passed through the hosted app and returned its HTTPS report link in Switch.
+The controlled GitHub run completed on 7 November 2026. Its evidence retains both the initial access-remains result and the later independent confirmation.
 
 ![A genuine Codex reply in the Switch-connected Mattermost room, showing the hosted GitHub check, protected account, and remaining coverage.](docs/images/switch-hosted-investigation.png)
+
+_A separate read-only investigation through the hosted app, with its genuine report link returned in Switch._
 
 ## How it works
 
@@ -122,7 +124,7 @@ The application and persistent records are hosted. Switch, Mattermost, Codex, an
 | Verification receipt email                                       | Template tested; automatic result delivery is planned.                |
 | Vercel access checks, other providers, administrator invitations | Planned.                                                              |
 
-V1 has one configured administrator, case-scoped read-only reviewers, and a deliberately restricted GitHub test scope. Email may reach Spam. The current GitHub check does not cover enterprise permissions, pending invitations, other organizations, or other services. See the [setup guide](docs/setup.md#authorization-jobs-and-evidence) for operational details.
+The current release supports one administrator and case-scoped read-only reviewers. Enterprise permissions, pending invitations, other organizations, and other services remain outside the GitHub check's coverage. See the [setup guide](docs/setup.md#authorization-jobs-and-evidence) for configuration and operational details.
 
 ## Development
 
