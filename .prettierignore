@@ -4,5 +4,6 @@ out
 coverage
 privates-notes
 .local
+.vercel
 package-lock.json
 next-env.d.ts

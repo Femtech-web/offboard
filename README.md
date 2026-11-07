@@ -6,6 +6,8 @@ Offboard coordinates an access investigation, an authenticated human decision, a
 
 Built for **Best Business Workflow** in Flip the Switch. A real Codex agent investigates in a Switch-connected Mattermost room; the human reviews the exact correction through Offboard, and a restricted local worker performs the approved provider operation and independently verifies it. [Build article draft](docs/blog/offboard-with-switch.md).
 
+[Open Offboard](https://offboard-mu.vercel.app) · [Sign in](https://offboard-mu.vercel.app/sign-in). Dashboard records require the configured administrator account. Switch, Mattermost, Codex, and the provider worker run locally during this demonstration.
+
 ## Current verification
 
 - Supabase Auth is connected; schema migrations and RLS are applied to the development project.
@@ -13,10 +15,14 @@ Built for **Best Business Workflow** in Flip the Switch. A real Codex agent inve
 - A real authenticated read-only journey has passed: case → persisted job → worker → GitHub enumeration → saved partial-coverage report. The protected integration account’s membership was discovered. Six authenticated routes returned HTTP 200. A later browser-driven scan also passed through the actual dashboard action and polling worker; its saved report appeared automatically.
 - Unauthorized worker requests returned HTTP 401. Database tests exercise non-admin refusal, protected identities, mismatched targets, expiry, single use, duplicate proposals, failed verification, partial coverage, and crash recovery inside a rolled-back transaction. Exhausted read-only retries produce terminal failure reports instead of leaving cases indefinitely investigating.
 - **A live controlled GitHub membership removal is verified.** The user-authorized `oluwafemi-akolade` account (stable ID `167610953`) was removed from `Optimus-pro-orgs`. The immediate rescan still reported access; that report is preserved. One separate read-only follow-up confirmed absence and saved a new report. The owner/integration account was protected throughout. Coverage remains partial; this does not clear other systems or permissions.
-- A genuine Switch/Codex/Mattermost investigation passed: an owner room request → restricted MCP tools → persisted scan job → real GitHub worker scan → saved partial-coverage report → the agent’s evidence-based reply in the same thread. The complete live removal and final post-removal room confirmation remain pending. A later request for the controlled account was posted at the user’s direction, but the local agent hit its account usage limit before investigating; do not count that attempt as a successful agent scan.
-- Vercel provider checks are not implemented. The application itself has not been deployed. The homepage, sign-in, all four dashboard views, case details, and a real report received a rendered browser review. Phone (320px) and tablet (768px) checks found no horizontal overflow in the four primary views; homepage checks also covered 390px and desktop 1280px. Basic keyboard focus was checked; this is not a complete accessibility certification.
+- A genuine Switch/Codex/Mattermost investigation passed: an owner room request → restricted MCP tools → persisted scan job → real GitHub worker scan → saved partial-coverage report → the agent’s evidence-based reply in the same thread. The complete controlled Switch-led journey also passed later: real room request, real agent scan, automatic proposal email, human approval, GitHub removal, independent rescan and the agent’s confirmation in the same thread. Earlier quota/auth failures are historical failed attempts, not successful scans.
+- The application is deployed on Vercel with Supabase persistence. The administrator confirmed hosted sign-in, Overview, and saved reports open correctly. Hosted route protection, separate worker/bridge credentials, email-review refusal checks, and eleven public build assets passed checks. Vercel **provider access checks** remain unimplemented.
+- A new genuine room request also passed through the hosted app, local worker, actual GitHub scan, persisted report, and Codex reply. It checked the protected owner case without approving or removing access. [Saved hosted report](https://offboard-mu.vercel.app/reports/ab78d48a-abf6-4c49-8e04-5c06e5c89b90) (administrator sign-in required).
+- The homepage, sign-in, all four dashboard views, case details, and a real report received a local rendered browser review. Phone (320px) and tablet (768px) checks found no horizontal overflow in the four primary views; homepage checks also covered 390px and desktop 1280px. Basic keyboard focus was checked; final hosted visual review and complete accessibility certification remain outstanding.
 
 This is an in-progress workflow, not a claim of completed company offboarding.
+
+![A real Codex reply in the Switch-connected Mattermost room shows the hosted GitHub investigation, protected owner account, and partial verification coverage.](docs/images/switch-hosted-investigation.png)
 
 ## People, cases, and providers
 
@@ -163,8 +169,6 @@ web_search = "disabled"
 shell_tool = false
 apps = false
 multi_agent = false
-[tools]
-view_image = false
 [mcp_servers.offboard]
 command = "/absolute/path/to/node-24"
 args = ["--import", "tsx", "/absolute/path/to/offboard/agent/src/server.ts"]
@@ -200,7 +204,7 @@ npm run test:live:read-only -- --github-cli-auth
 
 Offline tests use synthetic provider fixtures strictly inside tests. The live read-only check generates and consumes an in-memory administrator Auth link without sending email or changing a password, bootstraps only the configured confirmed administrator, records a clearly named protected-account test case, queues genuine provider checks, and inspects the saved report. It does not test browser rendering or substitute for a live removal demonstration. Stop other worker processes while running this diagnostic. It refuses active mutation jobs, supplies no removal adapter, and requires a report for the exact scan job created by that run.
 
-Latest validation: 70 offline tests and 107 real PostgreSQL safety checks passed, with database fixtures rolled back. Formatting, lint, types, and the production build passed. Live unauthorized worker and bridge approval requests were refused. These checks complement the recorded controlled removal; they do not establish an untested provider or hosted deployment.
+Latest validation: 70 offline tests and 110 real PostgreSQL safety checks passed, with database fixtures rolled back. Formatting, lint, types, and the production build passed. Live unauthorized worker and bridge approval requests were refused. These checks complement the recorded controlled removal; they do not establish an untested provider or hosted deployment.
 
 Production uses the supported Webpack build option because this environment restricted Turbopack’s internal PostCSS port. TypeScript is pinned to 6.0 while the lint parser adds TypeScript 7 support. Narrow minimatch overrides patch [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249); remove them when upstream dependencies resolve to patched versions. Some nested Next.js lint plugins emit ESLint 10 peer-range warnings.
 
@@ -214,9 +218,25 @@ Production uses the supported Webpack build option because this environment rest
 6. Observe the worker’s provider operation and independent scan; inspect the saved target, approver, provider response, timestamps, and remaining coverage.
 7. Have the agent report that same saved outcome in the room. Keep an unavailable provider marked unresolved.
 
-The chat-initiated read-only investigation and the human-email-approved removal are verified separately. The controlled removal used dashboard-origin scans because the local Switch agent hit its account usage limit. A complete room-initiated removal journey and genuine post-removal room confirmation remain acceptance work. Do not splice those separate runs into a claim that the complete journey passed.
+The complete Switch-led controlled journey passed on 7 November. Its genuine room request produced a Switch-origin scan, an automatic email proposal, an explicit human approval, an actual restricted removal, independent verification and the real agent’s result in the same thread. Earlier separate read-only and dashboard/email runs remain historical evidence; they were not substituted for this completed journey.
 
-### Recorded controlled removal — 7 November 2026
+### Complete Switch-led removal — 7 November 2026
+
+| Evidence                   | Saved record / UTC time                                                                                                                   |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Human room request         | [Original thread](http://localhost:52426/switch/pl/r9jnxn68pbbbbcqkysgrjgqmkc) · 14:16                                                    |
+| Real agent scan            | `4c6ddc4d-8de7-4922-9ea1-f0f4dad32976` · 14:21:42 · Switch origin                                                                         |
+| Saved findings             | `6dc2af74-6d23-4b96-8140-085b4e7eec9e` · access detected                                                                                  |
+| Automatic email            | `833135b8-7cac-4226-9d6c-c2b1319b7792` · Resend accepted                                                                                  |
+| Human email approval       | `1f66cba7-02f3-456f-badb-059b0ea85ae1` · 14:23:44 · consumed once                                                                         |
+| Actual operation           | `ee903325-db40-4b79-add2-7d6b265d2136` · GitHub HTTP 204 at 14:23:48                                                                      |
+| Immediate verification     | `04442243-5752-49b8-94cd-1dc211a8764b` · access remains; preserved                                                                        |
+| Independent follow-up      | [Verified membership removal](http://127.0.0.1:3000/reports/5ed69f67-52e5-44a5-a7f5-b362e995b169) · 14:23:58 · partially verified overall |
+| Genuine agent confirmation | [Same-thread result](http://localhost:52426/switch/pl/fbc36mamgf8kjqyak845kj1y7w) · 14:25                                                 |
+
+A separate read-only GitHub member-list check also found the controlled account absent; the protected integration account remained an active owner. When access is rediscovered in a later scan, its finding no longer inherits an old removal-verification date. Historical reports remain unchanged.
+
+### Earlier dashboard/email removal — 7 November 2026
 
 | Evidence             | Saved record / UTC time                                                                                                                   |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
@@ -231,7 +251,7 @@ A redesigned verification receipt was sent for this saved result; Resend subsequ
 
 The sender-domain check found `paayee.org` verified in Resend, its SPF/DKIM records verified, a published DMARC monitoring policy, and open/click tracking disabled. This checks sender configuration, not the authentication headers of the received message or Gmail's reason for its placement. Use the deployed public HTTPS origin in email links before the next delivery test. Follow the [Resend Gmail deliverability guide](https://resend.com/guides/email/deliverability/avoid-gmail-spam-folder); no configuration guarantees inbox placement.
 
-For the next full-journey recording, a fresh ordinary-member invitation was sent and accepted by the user. GitHub confirmed the controlled account is an active ordinary member again. This new test grant awaits its own investigation and explicit human approval; the earlier removal report describes the earlier grant. Record actual saved reports, real provider state, and genuine room messages. Keep passwords, environment files, and complete private approval URLs out of the recording. The earlier immediate “access remains” result is useful evidence of independent checking; it must not be hidden or rewritten.
+The fresh ordinary-member invitation was accepted, investigated through Switch, explicitly approved by the user and removed in the completed journey above. That membership is absent again. A new removal recording needs a newly accepted test grant; alternatively, clearly distinguish a live read-only demonstration from a walkthrough of the saved removal evidence. Record actual saved reports, real provider state, and genuine room messages. Keep passwords, environment files, and complete private approval URLs out of the recording. The earlier immediate “access remains” result is useful evidence of independent checking; it must not be hidden or rewritten.
 
 ### Demo readiness and evidence
 
@@ -247,18 +267,29 @@ The official [schedule](https://www.wemakedevs.org/hackathons/switch/schedule) l
 | Deployment         | Optional in the submission form; still an agreed project goal.                                                                           |
 | Extras             | Optional blog and #HowISwitch post. A Wispr usage card is conditional on Code with Wispr; PR links are conditional on Core Contribution. |
 
-Prepare materials now, but capture the complete combined workflow before representing it as verified. The article is a local draft, not a published blog link. No video, hosted deployment, or public repository URL exists yet.
+The complete combined workflow is verified and the application is hosted. Final running-workflow footage still needs to be recorded. The article is a draft, not a published blog link. The existing GitHub repository is private; public visibility and video publication remain outstanding.
 
-- Finish one genuine room-initiated controlled investigation through human approval, real removal, independent verification, and the agent's saved-result reply.
-- Deploy the application to Vercel and verify Auth, email review, separate worker/bridge authentication, and local polling against its HTTPS origin. Switch, Mattermost and the agent can remain local. This project goal must not delay the mandatory public repository and running-workflow video if the submission deadline becomes tight.
+- The genuine room-initiated controlled investigation, human approval, real removal, independent verification and agent result reply have passed. Record the running workflow and clearly identify the exact grant/run shown.
+- Hosted sign-in, access guards and the real room investigation passed; the local worker and restricted Switch adapter use the HTTPS origin. Complete the final visual review before recording.
 - Complete the final keyboard, mobile and error-state review; record actual unauthorized-action refusal and show unavailable providers remaining unchecked.
 - Publish a reviewed repository and README, prepare shareable evidence images, record the video, and verify judges can open the links. Registration and final entry are performed by the participant, in accordance with the [official rules](https://www.wemakedevs.org/hackathons/switch/rules).
 
-Twenty-two original screenshots are retained locally under `.local/demo-evidence/originals/`, indexed by `.local/demo-evidence/evidence-manifest.json` with source descriptions and SHA-256 hashes. The archive is ignored by Git. It includes historical errors, design/setup references, genuine application/room captures, the human approval screenshot, both removal emails, and six submission-form references. Older images expose private approval links or inbox information. Keep originals unchanged; publish only separately reviewed copies. The archive is not part of a public clone, and historical/reference images must not be presented as a new successful run.
+Twenty-six original screenshots are retained locally under `.local/demo-evidence/originals/`, indexed by `.local/demo-evidence/evidence-manifest.json` with source descriptions and SHA-256 hashes. The archive is ignored by Git. It includes historical errors, design/setup references, genuine application/room captures, the human approval screenshot, both removal emails, six submission-form references, three captures of the completed Switch-led journey, and the hosted read-only check. Older images expose private approval links or inbox information. Keep originals unchanged; publish only separately reviewed copies. The README image is a reviewed copy of the genuine hosted check and contains no private approval link. Historical/reference images must not be presented as a new successful run.
 
 ## Deployment and structure
 
-Deploy the Next.js app to Vercel with the Supabase, worker-auth, scoped Switch-adapter, and optional Resend environment values. Keep GitHub credentials on the worker. Point the local worker and `.env.switch` at the HTTPS deployment, using their separate matching credentials. Vercel must not attempt to contact a laptop’s localhost: the local adapter verifies Switch context and calls the hosted app. Configure production Auth URLs and verify authorization, polling, and the genuine room investigation on the deployed origin before recording a demonstration. No deployment has been performed yet.
+The application is deployed at **https://offboard-mu.vercel.app** on Node.js 24. The administrator confirmed sign-in and saved reports; hosted endpoints reject unauthorized worker requests, agent approval attempts, foreign-origin email decisions, and GET decisions. The local adapter verified genuine Switch room context and retrieved the saved removal evidence through the hosted app. This checks read access; the historical removal above happened before hosting.
+
+A fresh hosted read-only investigation then passed at **14:50:58 UTC on 7 November**: Switch-origin job `ba2e7b5c-a6d9-4ce4-b23b-317f91f433ca`, report `ab78d48a-abf6-4c49-8e04-5c06e5c89b90`. The agent replied in the [real Mattermost thread](http://localhost:52426/switch/pl/9phtkrqhubf1tgsmw9yiapjbjw) with the hosted report link, protected-owner finding and unchecked coverage. The worker’s heartbeat and actual scan completion were verified in Supabase. That local chat link is available only while the demo runtime is running.
+
+To reproduce deployment:
+
+1. Link a Vercel project, select the Next.js preset and Node.js 24, and use `npm run build`. The `.vercelignore` allowlist uploads web source and build configuration; private notes, original evidence, environment files, and local agent credentials are excluded.
+2. Add the two public Supabase settings, `OFFBOARD_ADMIN_EMAIL`, and the configured `OFFBOARD_SWITCH_*` scope. Store `SUPABASE_SECRET_KEY`, `OFFBOARD_WORKER_TOKEN`, `OFFBOARD_SWITCH_TOKEN`, and `RESEND_API_KEY` as sensitive server secrets. Set `APPROVAL_EMAIL_FROM` for a verified sender and `OFFBOARD_APP_URL` to the production HTTPS origin. Do not upload `GITHUB_ACCESS_TOKEN` or `SUPABASE_DB_URL`.
+3. Deploy production. Stop the old polling worker, update `OFFBOARD_APP_URL` in the local worker environment and `.env.switch`, and restart one worker with matching separate worker/bridge credentials. Running local sessions must remain online for investigations to progress. The hosted app never calls a laptop's localhost; the adapter verifies Switch context locally and calls the hosted app.
+4. Sign in with the confirmed administrator, check saved records and access guards, and run a real read-only room investigation before attempting another controlled removal. Password sign-in is the implemented Auth flow; if enabling email/OAuth redirects later, configure the production Site URL and redirect allowlist in Supabase as well.
+
+No new hosted removal or hosted approval-email delivery has been tested yet. Existing local review links are historical; new messages use the configured HTTPS origin. A successful web deployment does not implement a Vercel access connector.
 
 For the hackathon, Switch, Mattermost, Codex, and the worker can remain local. Future hosting needs a deployment compatible with Switch/Mattermost’s services, persistent storage, and agent lifecycle. An existing Cloudflare subscription alone does not establish that this stack can run there; no cloud runtime has been provisioned or validated.
 

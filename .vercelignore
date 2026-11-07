@@ -1,0 +1,11 @@
+# Upload only the web application and its build configuration.
+/*
+!/src
+!/src/**
+!/package.json
+!/package-lock.json
+!/next.config.ts
+!/tsconfig.json
+!/postcss.config.mjs
+!/eslint.config.mjs
+!/.nvmrc

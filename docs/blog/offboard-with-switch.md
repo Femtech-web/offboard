@@ -1,6 +1,6 @@
 # Offboard: investigating access in Switch, with human approval and verification
 
-_Build article draft · 7 November 2026 · Not published. The complete Switch-led removal run and final video are still pending; update the verification status before publication._
+_Build article draft · 7 November 2026 · Not published. The complete Switch-led controlled removal is verified, and [Offboard is deployed](https://offboard-mu.vercel.app). Final video and public repository access remain pending._
 
 When a contractor leaves, deleting an account from a checklist does not establish which permissions remain. Someone still needs to inspect the connected systems, decide which changes are appropriate, and check what happened afterward.
 
@@ -32,7 +32,7 @@ That convenience has a clear boundary: the private link grants this narrow decis
 
 ## An accepted response was not enough
 
-The most instructive live result came from a controlled ordinary-member account we were explicitly authorized to remove from our test organization, `Optimus-pro-orgs`. The owner/integration account remained protected.
+The complete live journey used a controlled ordinary-member account we were explicitly authorized to remove from our test organization, `Optimus-pro-orgs`. The owner/integration account remained protected. A real human room request led to a Codex scan through Switch; the resulting proposal email was sent automatically.
 
 The human received the proposal, confirmed the identity, and approved the exact membership removal. GitHub accepted the operation with HTTP 204. The immediate independent check still reported access.
 
@@ -42,12 +42,12 @@ A later read-only verification confirmed that the membership was absent. A new r
 
 | Actual event                          | Recorded time, UTC |
 | ------------------------------------- | ------------------ |
-| Human email approval                  | 13:34:37           |
-| GitHub accepted the removal           | 13:34:40           |
-| Immediate check still reported access | 13:34:42           |
-| Separate follow-up confirmed absence  | 13:40:37           |
+| Human email approval                  | 14:23:44           |
+| GitHub accepted the removal           | 14:23:48           |
+| Immediate check still reported access | 14:23:50           |
+| Separate follow-up confirmed absence  | 14:23:58           |
 
-The user also received GitHub's own organization-removal notification. Our redesigned verification receipt rendered in Gmail but reached Spam; the earlier approval email reached the inbox. We checked the verified Resend sender configuration and retained that delivery limitation rather than claiming guaranteed inbox placement.
+In an earlier controlled test, the user also received GitHub's own organization-removal notification. Our redesigned verification receipt rendered in Gmail but reached Spam; the earlier approval email reached the inbox. We checked the verified Resend sender configuration and retained that delivery limitation rather than claiming guaranteed inbox placement.
 
 These emails support the saved rescan. They do not replace it.
 
@@ -59,7 +59,7 @@ Approval binds an immutable target and expires. Execution rechecks the exact ide
 
 Reports preserve the person, permission, human decision, provider response, independent check, and remaining scope. A verified GitHub membership removal leaves overall coverage **partially verified**. Vercel is not implemented; other organizations, systems, and unexamined permissions remain unchecked.
 
-The current checks include 70 offline tests and 107 transactional PostgreSQL safety checks, with all database fixtures rolled back. Live unauthorized worker requests and attempted approval through the investigation bridge were refused. Those tests complement the provider evidence; they do not establish an untested integration.
+The current checks include 70 offline tests and 110 transactional PostgreSQL safety checks, with all database fixtures rolled back. Live unauthorized worker requests and attempted approval through the investigation bridge were refused. Those tests complement the provider evidence; they do not establish an untested integration.
 
 ## What worked, and what we would improve
 
@@ -71,10 +71,14 @@ These observations come from our tested Switch Console 0.40.1 setup. They are no
 
 ## What is verified today
 
-Two genuine journeys have passed: a Switch-led read-only investigation with an agent reply in Mattermost, and a dashboard-origin investigation followed by human email approval, real GitHub removal, and independent verification.
+The complete controlled journey passed: human request in Mattermost, real Codex investigation through Switch, genuine GitHub access discovery, automatic proposal email, explicit human approval, actual provider removal, independent rescan, persisted report and the agent's confirmation in the original thread.
 
-The combined room-to-removal-to-room-confirmation journey is still pending because the controlled-account Switch request stopped on quota. We will not present those separate runs as one completed sequence. Production deployment and the final running-workflow video also remain outstanding. Automatic proposal emails work; the verification receipt described above was sent once for the saved result, rather than by an automatic result-mail feature.
+The scan completed at 14:21:42 UTC, the human approved at 14:23:44, and the independent follow-up confirmed absence at 14:23:58. At 14:25 the real agent read the saved approval, operation and reports and explained the result back in the room. It preserved the immediate access-remains result and the partial coverage. An additional direct GitHub check confirmed the account absent while the protected owner remained active.
 
-The next step is to capture the complete shared workflow against a newly accepted controlled test grant, then publish the repository and a demo under three minutes. Setup, environment boundaries, migration commands, worker configuration, and the actual Switch room/tool setup are documented in the [README](../../README.md).
+The agent also noticed that a rediscovered grant still carried the finding's earlier verification date. We fixed that state transition: a new positive scan clears the old date, while historical verification reports stay intact. The regression is covered by the database checks.
 
-Additional providers and administrator invitations can follow. First, the team needs one access change it can explain, authorize, and independently verify.
+The web app is now deployed on Vercel with Supabase. The administrator confirmed hosted sign-in and saved reports. A fresh human room request then passed through the hosted app, local worker, real GitHub enumeration, persisted report and Codex's reply with an HTTPS report link at 14:51 UTC. This was a protected-account read-only check; the controlled removal described above happened before hosting. Hosted access-control checks passed. The final running-workflow video is still being prepared, and the repository remains private until its publication review is complete.
+
+Automatic proposal emails work; the earlier verification receipt described above was sent once for its saved result, rather than by an automatic result-mail feature. Setup, environment boundaries, migrations, worker configuration, and the actual Switch room/tool setup are documented in the [README](../../README.md). Hosting the application on Vercel does not add a Vercel access connector.
+
+The demo will show real chat and application footage with the exact human decision, provider evidence and remaining limits. Additional providers and administrator invitations can follow. The core result is a shared investigation and a human-controlled access correction the team can independently verify.
