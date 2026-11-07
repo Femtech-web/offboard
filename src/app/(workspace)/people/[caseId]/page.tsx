@@ -78,17 +78,13 @@ export default async function CaseDetailPage({
                 strokeWidth={1.5}
                 aria-hidden="true"
               />
-              <h2 className="text-lg font-medium">Provider identity</h2>
+              <h2 className="text-lg font-medium">GitHub account</h2>
             </div>
             {identity && (
               <>
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
                   <div>
                     <p className="font-medium">GitHub · @{identity.username}</p>
-                    <p className="mt-2 text-xs text-muted-foreground">
-                      Stable user ID:{" "}
-                      {identity.provider_user_id ?? "Awaiting a real scan"}
-                    </p>
                   </div>
                   <StatusBadge
                     status={identity.confirmed_at ? "confirmed" : "unconfirmed"}
@@ -96,8 +92,7 @@ export default async function CaseDetailPage({
                 </div>
                 {identity.confirmed_at ? (
                   <p className="mt-4 text-xs leading-6 text-muted-foreground">
-                    Confirmed by administrator {identity.confirmed_by} at{" "}
-                    {formatDate(identity.confirmed_at)}.
+                    Account confirmed on {formatDate(identity.confirmed_at)}.
                   </p>
                 ) : identity.provider_user_id ? (
                   <form
@@ -118,8 +113,8 @@ export default async function CaseDetailPage({
                     <p className="mb-4 text-sm leading-7 text-muted-foreground">
                       Verify independently that @{identity.username} (ID{" "}
                       {identity.provider_user_id}) belongs to{" "}
-                      {offboardingCase.full_name}. Confirmation authorizes
-                      identity association only.
+                      {offboardingCase.full_name}. Confirming the account
+                      doesn’t approve a removal.
                     </p>
                     <SubmitButton pendingLabel="Confirming…">
                       Confirm this identity
@@ -127,8 +122,8 @@ export default async function CaseDetailPage({
                   </form>
                 ) : (
                   <p className="mt-5 text-xs leading-6 text-muted-foreground">
-                    A provider lookup must resolve the username before
-                    confirmation is available.
+                    Run an access check to find this account before confirming
+                    it.
                   </p>
                 )}
               </>
@@ -189,12 +184,6 @@ export default async function CaseDetailPage({
                           </dd>
                         </div>
                         <div className="flex flex-wrap justify-between gap-2">
-                          <dt className="text-muted-foreground">Resource</dt>
-                          <dd className="break-all">
-                            {finding.resource_identifier}
-                          </dd>
-                        </div>
-                        <div className="flex flex-wrap justify-between gap-2">
                           <dt className="text-muted-foreground">
                             Last discovered
                           </dt>
@@ -221,8 +210,7 @@ export default async function CaseDetailPage({
                               {finding.protection_reasons
                                 .map(humanize)
                                 .join(", ")}
-                              . Use a separate, controlled non-privileged
-                              identity for removal testing.
+                              . This account cannot be removed through Offboard.
                             </p>
                           </div>
                         </div>
@@ -318,12 +306,15 @@ export default async function CaseDetailPage({
                       )}
                       {approval && (
                         <p className="mt-5 border-t border-border pt-4 text-xs leading-6 text-muted-foreground">
-                          Latest decision: {approval.status} ·{" "}
+                          Latest decision:{" "}
+                          {approval.status === "consumed"
+                            ? "Approved (used)"
+                            : humanize(approval.status)}{" "}
+                          ·{" "}
                           {approval.authorization_method === "email"
                             ? "email review"
                             : "dashboard"}{" "}
-                          · administrator {approval.approved_by} ·{" "}
-                          {formatDate(approval.created_at)}
+                          · {formatDate(approval.created_at)}
                           {approval.status === "approved"
                             ? ` · expires ${formatDate(approval.expires_at)}`
                             : ""}
@@ -340,34 +331,33 @@ export default async function CaseDetailPage({
                           <p className="mt-5 text-xs leading-6 text-muted-foreground">
                             Automatic email:{" "}
                             {dispatch.status === "queued"
-                              ? "queued for the running worker to dispatch"
+                              ? "waiting to send"
                               : dispatch.status === "processing"
-                                ? "being submitted; no acceptance confirmed yet"
+                                ? "sending"
                                 : dispatch.status === "skipped"
-                                  ? "skipped because the proposal or recipient was no longer eligible, or a recent request already exists"
+                                  ? "not sent; a recent review already exists or this access no longer needs approval"
                                   : dispatch.status === "failed"
-                                    ? "provider rejected submission; no automatic resend"
-                                    : "submission is uncertain; no automatic resend"}
+                                    ? "couldn’t be sent; request a new link to retry"
+                                    : "delivery couldn’t be confirmed; check your inbox before requesting another link"}
                             .
                           </p>
                         )}
                       {emailRequest && (
-                        <div className="mt-5 border-t border-border pt-4 text-xs leading-6 text-muted-foreground">
-                          <p>
-                            Latest{" "}
-                            {emailRequest.request_origin === "automatic"
-                              ? "automatic email"
-                              : "email request"}{" "}
-                            · {formatDate(emailRequest.created_at)}
-                          </p>
-                          <p>
+                        <details
+                          open={emailRequest.status === "pending"}
+                          className="mt-5 border-t border-border pt-4 text-xs leading-6 text-muted-foreground"
+                        >
+                          <summary className="cursor-pointer rounded-sm text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand">
+                            Review email · {formatDate(emailRequest.created_at)}
+                          </summary>
+                          <p className="mt-2">
                             {emailRequest.delivery_status === "accepted"
-                              ? "Resend accepted the email; inbox delivery is not confirmed."
+                              ? "Accepted for delivery. Check your inbox and spam folder."
                               : emailRequest.delivery_status === "failed"
-                                ? "Resend rejected the email. No email approval is available."
+                                ? "The email couldn’t be sent. Request a new review link."
                                 : emailRequest.delivery_status === "unknown"
-                                  ? "Email acceptance could not be confirmed. This link cannot authorize a removal."
-                                  : "Email submission is pending confirmation."}
+                                  ? "Delivery couldn’t be confirmed. Request a new review link before deciding."
+                                  : "Waiting for the email service to respond."}
                           </p>
                           <p>
                             Review:{" "}
@@ -375,10 +365,12 @@ export default async function CaseDetailPage({
                             Date.parse(emailRequest.expires_at) <=
                               records.observedAt
                               ? "expired"
-                              : emailRequest.status}{" "}
+                              : emailRequest.status === "decided"
+                                ? "decision recorded"
+                                : emailRequest.status}{" "}
                             · recipient {emailRequest.recipient_email}
                           </p>
-                        </div>
+                        </details>
                       )}
                     </article>
                   );
@@ -386,9 +378,8 @@ export default async function CaseDetailPage({
               </div>
             ) : (
               <div className="rounded-xl border border-dashed border-border p-6 text-sm leading-7 text-muted-foreground">
-                No persisted findings yet. A completed scan will record
-                discovered access or explicitly report that access was not
-                detected in its checked scope.
+                No access findings yet. Run an investigation to see what this
+                account can access.
               </div>
             )}
           </section>
@@ -426,9 +417,8 @@ export default async function CaseDetailPage({
               <h2 className="font-medium">Investigate access</h2>
             </div>
             <p className="mb-5 text-xs leading-6 text-muted-foreground">
-              Request an on-demand provider check. For a shared investigation,
-              ask Offboard in the configured Switch room. The local agent and
-              worker must be running.
+              Ask Offboard in the security-offboarding room to investigate this
+              case with you, or run an access check below.
             </p>
             <p className="mb-2 text-xs text-muted-foreground">
               Switch room request
@@ -437,8 +427,8 @@ export default async function CaseDetailPage({
               @offboard investigate {caseId}
             </code>
             <p className="mb-5 text-xs leading-6 text-muted-foreground">
-              Room requests are limited to locally allowlisted cases. Chat
-              cannot confirm an identity or authorize a removal.
+              Keep the Offboard agent running in Switch. You’ll review and
+              approve any removal separately.
             </p>
             {records.integrations.length ? (
               <form action={requestScan} className="space-y-4">
@@ -458,7 +448,7 @@ export default async function CaseDetailPage({
                   </select>
                 </label>
                 <SubmitButton pendingLabel="Queuing…">
-                  Request a real scan
+                  Check access
                 </SubmitButton>
               </form>
             ) : (
@@ -472,7 +462,7 @@ export default async function CaseDetailPage({
             )}
           </section>
           <section>
-            <h2 className="mb-4 text-sm font-medium">Worker jobs</h2>
+            <h2 className="mb-4 text-sm font-medium">Checks & changes</h2>
             {jobs.length ? (
               <ol className="space-y-3">
                 {jobs.slice(0, 8).map((job) => (
@@ -481,7 +471,13 @@ export default async function CaseDetailPage({
                     className="rounded-lg border border-border p-4"
                   >
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <p className="text-xs capitalize">{humanize(job.kind)}</p>
+                      <p className="text-xs">
+                        {job.kind === "scan"
+                          ? "Access check"
+                          : job.kind === "execute_removal"
+                            ? "Access removal"
+                            : "Connection check"}
+                      </p>
                       <StatusBadge status={job.status} />
                     </div>
                     <p className="mt-2 text-xs text-muted-foreground">
@@ -511,7 +507,7 @@ export default async function CaseDetailPage({
               </ol>
             ) : (
               <p className="text-xs leading-6 text-muted-foreground">
-                No jobs have been requested.
+                No checks or changes yet.
               </p>
             )}
           </section>

@@ -9,7 +9,7 @@ const errors: Record<string, string> = {
     "Sign-in failed. Check your confirmed email and password, then try again.",
   access: "This account does not have administrator access to Offboard.",
   database:
-    "The database is not ready. Apply the Offboard migration before signing in.",
+    "Your workspace is not ready. Contact its administrator and try again.",
 };
 
 export default async function SignInPage({
@@ -61,17 +61,14 @@ export default async function SignInPage({
           {!configured ? (
             <div className="mt-8 rounded-xl border border-attention/25 bg-attention/5 p-5">
               <p className="text-sm font-medium text-attention">
-                Supabase setup required
+                Workspace setup required
               </p>
               <p className="mt-2 text-sm leading-7 text-muted-foreground">
-                Add the project URL, publishable key, server secret key, and
-                administrator email to the local .env file. Apply the database
-                migration and create your confirmed Auth user as described in
-                the README.
+                Offboard isn’t connected to a workspace yet. Ask your
+                administrator to finish setup before signing in.
               </p>
               <p className="mt-3 text-xs leading-6 text-muted-foreground">
-                No case data or integration status is available until the
-                database is connected.
+                Your cases and integrations will appear once setup is complete.
               </p>
             </div>
           ) : (

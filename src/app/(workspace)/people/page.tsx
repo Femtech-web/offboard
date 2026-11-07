@@ -20,7 +20,6 @@ export default async function PeoplePage({
   return (
     <>
       <PageHeading
-        eyebrow="Access reviews"
         title="People & offboarding"
         description="Create a case, review access, and approve the changes you need."
       >

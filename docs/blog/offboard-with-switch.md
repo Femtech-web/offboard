@@ -1,6 +1,6 @@
 # Offboard: investigating access in Switch, with human approval and verification
 
-_Build article draft · 7 November 2026 · Not published. The complete Switch-led controlled removal is verified, and [Offboard is deployed](https://offboard-mu.vercel.app). Final video and public repository access remain pending._
+_Build notes · 7 November 2026 · [Try Offboard](https://offboard-mu.vercel.app)._
 
 When a contractor leaves, deleting an account from a checklist does not establish which permissions remain. Someone still needs to inspect the connected systems, decide which changes are appropriate, and check what happened afterward.
 
@@ -77,8 +77,8 @@ The scan completed at 14:21:42 UTC, the human approved at 14:23:44, and the inde
 
 The agent also noticed that a rediscovered grant still carried the finding's earlier verification date. We fixed that state transition: a new positive scan clears the old date, while historical verification reports stay intact. The regression is covered by the database checks.
 
-The web app is now deployed on Vercel with Supabase. The administrator confirmed hosted sign-in and saved reports. A fresh human room request then passed through the hosted app, local worker, real GitHub enumeration, persisted report and Codex's reply with an HTTPS report link at 14:51 UTC. This was a protected-account read-only check; the controlled removal described above happened before hosting. Hosted access-control checks passed. The final running-workflow video is still being prepared, and the repository remains private until its publication review is complete.
+The web app is deployed on Vercel with Supabase. A fresh human room request also passed through the hosted app, local worker, real GitHub enumeration, saved report and Codex's reply with an HTTPS report link. This was a protected-account read-only check; the controlled removal described above happened before hosting.
 
 Automatic proposal emails work; the earlier verification receipt described above was sent once for its saved result, rather than by an automatic result-mail feature. Setup, environment boundaries, migrations, worker configuration, and the actual Switch room/tool setup are documented in the [README](../../README.md). Hosting the application on Vercel does not add a Vercel access connector.
 
-The demo will show real chat and application footage with the exact human decision, provider evidence and remaining limits. Additional providers and administrator invitations can follow. The core result is a shared investigation and a human-controlled access correction the team can independently verify.
+Additional providers and administrator invitations can follow. The core result is a shared investigation and a human-controlled access correction the team can independently verify.

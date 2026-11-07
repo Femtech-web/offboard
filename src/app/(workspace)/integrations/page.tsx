@@ -1,5 +1,5 @@
 import { PendingJobRefresh } from "@/components/layout/pending-job-refresh";
-import { GitBranch, PlugZap, TriangleAlert } from "lucide-react";
+import { GitBranch, PlugZap } from "lucide-react";
 import { workspaceRecords } from "@/server/queries";
 import { connectGitHub } from "@/server/actions";
 import {
@@ -27,9 +27,8 @@ export default async function IntegrationsPage({
         )}
       />
       <PageHeading
-        eyebrow="Integrations"
-        title="Know what’s connected."
-        description="Connection status comes from a real worker check. Provider credentials stay with the local worker."
+        title="Integrations"
+        description="Connect the organizations you want to check and review their connection status."
       />
       <OperationError error={error} />
       <div className="grid items-start gap-8 xl:grid-cols-[1fr_340px]">
@@ -78,8 +77,8 @@ export default async function IntegrationsPage({
                 </dl>
                 {integration.permissions.organizationRole === "admin" && (
                   <p className="mt-5 text-xs leading-6 text-muted-foreground">
-                    Active administrator membership observed. Removal capability
-                    has not been established by a read-only connection check.
+                    Administrator access confirmed. Permission to remove members
+                    is checked separately before each change.
                   </p>
                 )}
                 {integration.last_error && (
@@ -88,8 +87,8 @@ export default async function IntegrationsPage({
                     className="mt-4 rounded-lg border border-critical/20 p-3 text-xs leading-6 text-critical"
                   >
                     Last check failed:{" "}
-                    {integration.last_error.replaceAll("_", " ")}. Prior
-                    successful checks do not establish current availability.
+                    {integration.last_error.replaceAll("_", " ")}. Check the
+                    organization’s permissions and try again.
                   </p>
                 )}
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
@@ -101,7 +100,7 @@ export default async function IntegrationsPage({
                           ["queued", "leased"].includes(job.status),
                       ).length
                     }{" "}
-                    pending jobs
+                    pending actions
                   </p>
                   <form action={connectGitHub}>
                     <input
@@ -121,27 +120,25 @@ export default async function IntegrationsPage({
               icon={PlugZap}
               title="Connect an authorized organization."
             >
-              Add the GitHub organization configured in your local worker. The
-              connection stays unverified until the provider responds.
+              Add your company’s GitHub organization. Offboard checks the
+              connection before showing it as connected.
             </EmptyState>
           )}
           <section className="rounded-xl border border-dashed border-border p-6">
             <div className="flex items-center justify-between gap-4">
               <h2 className="font-medium">Vercel</h2>
-              <StatusBadge status="not_connected" />
+              <StatusBadge status="unsupported" />
             </div>
             <p className="mt-3 text-sm leading-7 text-muted-foreground">
-              Vercel access checks are not implemented. No Vercel team or
-              permission has been verified, and GitHub results cannot clear this
-              scope.
+              Vercel access checks aren’t available yet. Vercel permissions
+              remain unchecked in your reports.
             </p>
           </section>
         </div>
         <section className="rounded-xl border border-border bg-surface p-6">
           <h2 className="font-medium">Add GitHub</h2>
           <p className="mt-3 text-xs leading-6 text-muted-foreground">
-            Use an organization you administer and have permission to test. Its
-            name must match the worker’s configured allowlist.
+            Enter an organization you manage that’s enabled for this workspace.
           </p>
           <form action={connectGitHub} className="mt-5 space-y-5">
             <label className="block text-sm">
@@ -159,14 +156,9 @@ export default async function IntegrationsPage({
               Connect & check
             </SubmitButton>
           </form>
-          <div className="mt-6 flex items-start gap-3 border-t border-border pt-5 text-xs leading-6 text-muted-foreground">
-            <TriangleAlert
-              className="mt-1 size-4 shrink-0 text-attention"
-              aria-hidden="true"
-            />
-            The local worker must be running to process checks. This form never
-            grants the agent removal approval.
-          </div>
+          <p className="mt-6 border-t border-border pt-5 text-xs leading-6 text-muted-foreground">
+            Connecting an organization doesn’t remove anyone’s access.
+          </p>
         </section>
       </div>
     </>

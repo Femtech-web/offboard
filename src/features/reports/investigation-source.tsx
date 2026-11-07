@@ -9,11 +9,10 @@ export function InvestigationSource({
   if (!context) return null;
   return (
     <section className="rounded-xl border border-border bg-surface p-6">
-      <h2 className="text-lg font-medium">Switch investigation source</h2>
+      <h2 className="text-lg font-medium">Started in Switch</h2>
       <p className="mt-2 text-sm leading-7 text-muted-foreground">
-        The local adapter verified this request against the configured
-        Mattermost room’s saved Switch context. It requested a read-only scan
-        and granted no removal approval.
+        This investigation began with a verified request in the Mattermost room.
+        Removal approval is recorded separately.
       </p>
       <dl className="mt-5 grid gap-4 text-xs sm:grid-cols-2">
         {[

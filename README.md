@@ -1,40 +1,68 @@
 # Offboard
 
-**When someone leaves, prove their access is gone.**
+[![Offboard — When someone leaves, prove their access is gone.](docs/images/offboard-cover.png)](https://offboard-mu.vercel.app)
 
-Offboard coordinates an access investigation, an authenticated human decision, and an independent provider rescan. The application has four primary views: **Overview**, **People & Offboarding**, **Integrations**, and **Verification Reports**. All operational counts, findings, connection states, jobs, and reports come from Supabase records.
+**Human-approved access removal, independently verified.**
 
-Built for **Best Business Workflow** in Flip the Switch. A real Codex agent investigates in a Switch-connected Mattermost room; the human reviews the exact correction through Offboard, and a restricted local worker performs the approved provider operation and independently verifies it. [Build article draft](docs/blog/offboard-with-switch.md).
+Offboard helps founders, engineering leads, and IT teams close the gap between a departure checklist and the access someone still has. A Codex agent investigates with your team in Switch. A human approves the exact change. A fresh provider check verifies the result.
 
-[Open Offboard](https://offboard-mu.vercel.app) · [Sign in](https://offboard-mu.vercel.app/sign-in). Dashboard records require the configured administrator account. Switch, Mattermost, Codex, and the provider worker run locally during this demonstration.
+[Live app](https://offboard-mu.vercel.app) · [How we use Switch](#how-we-use-switch) · [Run locally](#run-locally) · [Build story](docs/blog/offboard-with-switch.md)
 
-## Current verification
+## Why Offboard
 
-- Supabase Auth is connected; schema migrations and RLS are applied to the development project.
-- A real automatic proposal email reached the administrator, who explicitly confirmed the controlled identity and approved its removal through the private review. The approval was consumed once. GitHub accepted the removal, and a later independent check verified the exact membership absent. These are separately persisted events; email delivery or an accepted deletion response alone cannot establish removal.
-- A real authenticated read-only journey has passed: case → persisted job → worker → GitHub enumeration → saved partial-coverage report. The protected integration account’s membership was discovered. Six authenticated routes returned HTTP 200. A later browser-driven scan also passed through the actual dashboard action and polling worker; its saved report appeared automatically.
-- Unauthorized worker requests returned HTTP 401. Database tests exercise non-admin refusal, protected identities, mismatched targets, expiry, single use, duplicate proposals, failed verification, partial coverage, and crash recovery inside a rolled-back transaction. Exhausted read-only retries produce terminal failure reports instead of leaving cases indefinitely investigating.
-- **A live controlled GitHub membership removal is verified.** The user-authorized `oluwafemi-akolade` account (stable ID `167610953`) was removed from `Optimus-pro-orgs`. The immediate rescan still reported access; that report is preserved. One separate read-only follow-up confirmed absence and saved a new report. The owner/integration account was protected throughout. Coverage remains partial; this does not clear other systems or permissions.
-- A genuine Switch/Codex/Mattermost investigation passed: an owner room request → restricted MCP tools → persisted scan job → real GitHub worker scan → saved partial-coverage report → the agent’s evidence-based reply in the same thread. The complete controlled Switch-led journey also passed later: real room request, real agent scan, automatic proposal email, human approval, GitHub removal, independent rescan and the agent’s confirmation in the same thread. Earlier quota/auth failures are historical failed attempts, not successful scans.
-- The application is deployed on Vercel with Supabase persistence. The administrator confirmed hosted sign-in, Overview, and saved reports open correctly. Hosted route protection, separate worker/bridge credentials, email-review refusal checks, and eleven public build assets passed checks. Vercel **provider access checks** remain unimplemented.
-- A new genuine room request also passed through the hosted app, local worker, actual GitHub scan, persisted report, and Codex reply. It checked the protected owner case without approving or removing access. [Saved hosted report](https://offboard-mu.vercel.app/reports/ab78d48a-abf6-4c49-8e04-5c06e5c89b90) (administrator sign-in required).
-- The homepage, sign-in, all four dashboard views, case details, and a real report received a local rendered browser review. Phone (320px) and tablet (768px) checks found no horizontal overflow in the four primary views; homepage checks also covered 390px and desktop 1280px. Basic keyboard focus was checked; final hosted visual review and complete accessibility certification remain outstanding.
+People leave; permissions can remain. Offboard brings the investigation, decision, and verification into one record, so the team can see what changed and what still needs attention.
 
-This is an in-progress workflow, not a claim of completed company offboarding.
+The first connector supports GitHub organization membership and outside-collaborator access. Every finding, approval, removal, and report comes from actual provider checks and saved records.
 
-![A real Codex reply in the Switch-connected Mattermost room shows the hosted GitHub investigation, protected owner account, and partial verification coverage.](docs/images/switch-hosted-investigation.png)
+## For judges
 
-## People, cases, and providers
+Built for **Best Business Workflow** in the [Flip the Switch hackathon](https://www.wemakedevs.org/hackathons/switch).
 
-A case represents one person leaving. **Integrations** connects the company's authorized organizations or teams; each case associates the person's separately confirmed accounts with those providers. Findings, approvals, and verification retain their provider and exact permission scope.
+- **See the product:** [open Offboard](https://offboard-mu.vercel.app). Case data requires administrator sign-in; no shared administrator password is published.
+- **Follow the workflow:** a human request in the Switch-connected Mattermost room leads to a real GitHub investigation, a private approval email, human approval, removal, an independent check, and the agent’s reply in the same thread.
+- **Inspect the result:** the [saved removal report](https://offboard-mu.vercel.app/reports/5ed69f67-52e5-44a5-a7f5-b362e995b169) is available to the administrator. The build story explains the actual run; the setup guide lets reviewers reproduce it with their own accounts.
 
-Today the simple case form asks for the person's name, departure date, and GitHub username. Approval email goes to the confirmed administrator; Gmail is not a provider identity lookup. As working connectors are added, the same case can contain GitHub, Vercel, and other confirmed identities, with accounts managed inside the case. A work email may help identify the departure record but cannot establish account ownership or authorize a removal. Multi-provider case handling is planned; GitHub is the only implemented connector. Administrator invitations and role management follow completion of the core journey; V1 uses one configured administrator.
+The complete controlled GitHub journey passed on 7 November 2026. GitHub accepted the removal, the immediate check still found access, and a separate read-only follow-up confirmed the membership absent. Both reports are retained. A later investigation also passed through the hosted app and returned its HTTPS report link in Switch.
 
-The intended future shortcut is **Check all connected providers**, with an optional multiselect to narrow a case's scope. Company integration setup can guide an administrator through several selected providers, but each provider retains its own authorization and genuine connection status. Creating a departure records the intended scope; it does not silently authorize a new integration or approve any removal. The shared investigation still begins through Switch.
+![A genuine Codex reply in the Switch-connected Mattermost room, showing the hosted GitHub check, protected account, and remaining coverage.](docs/images/switch-hosted-investigation.png)
 
-## Local setup
+## How it works
 
-Use Node.js 24 LTS and npm:
+1. **Create a departure.** Add the person, departure date, and GitHub account.
+2. **Investigate together.** Ask `@offboard investigate <case UUID>` in the team room. The agent requests a provider check and discusses the saved findings.
+3. **Review the change.** Offboard emails an eligible proposal to the administrator. Confirm the account and approve or reject that exact removal, through the private email review or dashboard.
+4. **Verify the result.** Offboard rechecks the target, performs the approved operation, independently scans again, and saves the evidence. The agent reads those records and reports back in the room.
+
+The dashboard stays focused on **Overview**, **People & Offboarding**, **Integrations**, and **Verification Reports**.
+
+## How we use Switch
+
+We connected a **Codex agent named `offboard`** through **Switch Console** to the **Mattermost** room `security-offboarding`.
+
+The human starts an investigation in the room, where the agent can read the shared conversation and use three restricted Offboard tools:
+
+| Tool           | What it does                                                        |
+| -------------- | ------------------------------------------------------------------- |
+| `inspect_case` | Reads the person, account, findings, decisions, and saved evidence. |
+| `request_scan` | Requests one read-only GitHub investigation for the named case.     |
+| `get_job`      | Reads progress and the report for that investigation.               |
+
+The local adapter checks the actual room and human request before calling Offboard. The team discusses findings in the same thread. An administrator makes the removal decision separately, and the agent returns to the saved approval, provider response, and verification when explaining the outcome.
+
+Switch provides the shared context and agent participation for this workflow. It is more than a notification destination. The agent has no approval or removal tool and never receives the provider credential or private review link.
+
+### Set up the channel and agent
+
+1. Install [Switch Console](https://docs.switchagents.ai/switch-rooms/getting-started/install-switch-console), start its local server with Docker running, and configure the Codex provider.
+2. Create the `offboard` agent with a dedicated working directory, then add it to a Mattermost room named `security-offboarding`.
+3. Configure the three-tool MCP adapter and the matching room, human sender, case, and integration scope in Offboard. Keep Bypass off and review the effective tools.
+4. Start the app and provider worker, keep the agent online, and send the investigation request in the room.
+
+The [setup guide](docs/setup.md#switch-and-mattermost) includes the exact environment files, Codex configuration, room instructions, and troubleshooting. The tested versions were Switch Console 0.40.1, Switch server 0.31.0, and Codex CLI 0.167.0.
+
+## Run locally
+
+Requires **Node.js 24**, npm, Supabase, an authorized GitHub organization, and Switch Console with Docker and a signed-in Codex provider. Resend is used for email reviews.
 
 ```sh
 nvm use
@@ -42,26 +70,7 @@ npm ci
 cp .env.example .env
 ```
 
-Fill in `.env` locally. Existing configured files should be kept; do not overwrite them with the example. Real environment files, `privates-notes/`, `.local/`, and build output are ignored by Git.
-
-| Variable                               | Where it runs / purpose                                                                                                                                              |
-| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_SUPABASE_URL`             | App: Supabase project URL.                                                                                                                                           |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | App: public API key; RLS still governs database access.                                                                                                              |
-| `SUPABASE_SECRET_KEY`                  | App server and setup scripts only: privileged key, never a browser or agent credential.                                                                              |
-| `SUPABASE_DB_URL`                      | Migration/tests only: PostgreSQL connection URL. Use the session pooler when the direct hostname is unreachable. Percent-encode reserved characters in the password. |
-| `OFFBOARD_ADMIN_EMAIL`                 | Server: confirmed Auth email permitted to bootstrap as administrator.                                                                                                |
-| `OFFBOARD_APP_URL`                     | Worker: `http://127.0.0.1:3000` locally; HTTPS application origin when hosted.                                                                                       |
-| `OFFBOARD_WORKER_TOKEN`                | App server + worker: shared random bearer secret of at least 32 characters. Generate with `openssl rand -hex 32`. Never give it to the agent.                        |
-| `GITHUB_ACCESS_TOKEN`                  | Local worker only: authorized GitHub user token, or omit when using `--github-cli-auth`.                                                                             |
-| `GITHUB_ORGANIZATION`                  | Worker: the single authorized organization allowlist.                                                                                                                |
-| `GITHUB_TEST_USERNAME`                 | Explicit read-only CLI/live-test target. Does not confirm a removal identity.                                                                                        |
-| `GITHUB_PROTECTED_USER_IDS`            | Worker: comma-separated stable IDs protected in addition to owners and the integration identity.                                                                     |
-| `RESEND_API_KEY`                       | App server only: Resend send-email API key. Never expose it to the worker, agent, or browser.                                                                        |
-| `APPROVAL_EMAIL_FROM`                  | App server: `Offboard <notifications@paayee.org>`; the domain must be verified in Resend.                                                                            |
-| `GITHUB_REMOVAL_TEST_USER_IDS`         | Worker: stable IDs of explicitly authorized disposable test accounts. Empty means every removal is refused.                                                          |
-
-Find the Supabase URL and API keys in [project settings](https://supabase.com/docs/guides/getting-started/api-keys). Obtain the database URL from **Connect**; see [connection methods](https://supabase.com/docs/guides/database/connecting-to-postgres). Neither database passwords nor Auth passwords belong in chat or the repository.
+Fill in your own values using the [configuration guide](docs/setup.md#local-setup), create the confirmed Supabase administrator, and run:
 
 ```sh
 npm run env:check
@@ -69,239 +78,70 @@ npm run db:migrate
 npm run dev
 ```
 
-The migration runner applies checksummed SQL files in one transaction with an advisory lock. Never edit an applied migration; add a subsequent migration. If a database connection is unavailable, the migration files can be reviewed and applied in order in Supabase SQL Editor; keep migration history consistent before switching back to the runner.
-
-In **Supabase → Authentication → Users**, create a confirmed user whose email matches `OFFBOARD_ADMIN_EMAIL`. Use that user’s password at [the local sign-in page](http://127.0.0.1:3000/sign-in). On successful validated sign-in, only that allowlisted email can bootstrap an administrator profile. User metadata cannot grant roles. There is no public signup or browser-side role editing.
-
-Neue Montreal Regular, Medium, and Bold are loaded locally through `next/font/local`. All page and component appearance uses Tailwind. The global stylesheet contains only Tailwind imports and theme declarations.
-
-## Provider worker
-
-Run the web app and worker in separate terminals:
+In another terminal:
 
 ```sh
-# Reuse an existing authorized GitHub CLI sign-in; token stays in memory.
 npm run worker:run -- --github-cli-auth
 ```
 
-Omit the flag when using `GITHUB_ACCESS_TOKEN`. The CLI reads the existing credential with a fixed `gh auth token --hostname github.com` command. Agent input is never converted into shell commands.
+In the app, connect the authorized GitHub organization and create a case. Configure the Switch adapter before requesting a room investigation. Use a separate account you control for any removal test; the organization owner and integration account remain protected.
 
-In **Integrations**, add the configured GitHub organization. The record stays unverified until the worker completes a real check. In **People & Offboarding**, create a case and request a scan. A successful scan resolves the stable user ID; an administrator must separately confirm that identity before approving a removal.
+[Full setup and deployment guide →](docs/setup.md)
 
-Standalone, read-only diagnostics remain available:
-
-```sh
-npm run worker:doctor -- --github-cli-auth
-npm run worker:scan -- --github-cli-auth
-```
-
-The worker supports GitHub user tokens with active administrator membership. GitHub App authentication is not implemented. Read checks require permissions for organization member and outside-collaborator enumeration; removal requires the corresponding write/admin permission and any required SSO authorization. A successful connection check does not prove write capability. Consult the [organization members](https://docs.github.com/en/rest/orgs/members) and [outside collaborators](https://docs.github.com/en/rest/orgs/outside-collaborators) APIs.
-
-Requests use a fixed GitHub API origin, reject redirects, validate responses, and constrain pagination to the requested scope. Errors are sanitized; raw tokens, headers, and response bodies are not stored.
-
-## Authorization, jobs, and evidence
+## Architecture
 
 ```mermaid
 flowchart LR
-  Human --> Room[Switch + Mattermost room]
-  Room <--> Agent[Real Codex agent]
-  Agent <--> Adapter[Restricted MCP adapter]
-  Adapter -->|Verify saved room context| Room
-  Adapter <-->|Scoped authenticated investigation calls| App
-  Human[Authenticated administrator] --> App[Next.js application]
-  App --> DB[(Supabase Auth + PostgreSQL)]
-  Worker[Local worker] -->|Authenticated HTTPS polling| App
-  Worker --> GitHub[GitHub API]
-  GitHub --> Worker
-  Worker -->|Findings and verification evidence| App
-  DB --> Reports[Four dashboard views]
+  Human[Human in Mattermost] <--> Switch[Switch + Codex]
+  Switch --> Adapter[Restricted investigation tools]
+  Adapter --> App[Offboard · Next.js on Vercel]
+  Admin[Human review · dashboard or email] --> App
+  App <--> Database[Supabase · Auth and records]
+  Worker[Provider worker] <-->|Authenticated HTTPS polling| App
+  Worker <--> GitHub[GitHub API]
 ```
 
-Authenticated users read under administrator RLS. Mutations use narrow server-authorized database functions. Worker functions are executable only with the server’s service role, behind bearer-authenticated application endpoints. The local worker receives scoped jobs rather than a Supabase secret key. Agent transport and human approval are separate trust boundaries.
+The application and persistent records are hosted. Switch, Mattermost, Codex, and the provider worker run locally for the current demonstration. New work requires those sessions to be online. Provider credentials stay with the worker; the hosted app and investigation adapter use separate credentials.
 
-Approvals bind an immutable snapshot of the stable account ID, organization ID, username, exact grant, and action. They expire after 15 minutes. Execution requires a currently authorized approver, confirmed matching identity, fresh provider preflight, no protection flags, a valid job lease, and successful transactional single-use consumption. The worker additionally requires the target’s ID in `GITHUB_REMOVAL_TEST_USER_IDS`. Owners, the integration identity, privileged accounts, and configured protected IDs are refused.
+## Human control and verification
 
-### Automatic private email review
+- **Exact approval:** each decision binds one account, organization, permission, and proposed operation. Approvals expire and can be used once.
+- **Protected accounts:** owners, the integration identity, and configured protected accounts cannot be removed.
+- **Private email review:** eligible proposals are sent automatically. Opening a link changes nothing; a separate explicit decision is required. The link lasts 15 minutes and must not be forwarded.
+- **Independent evidence:** an accepted provider response is saved separately from the follow-up check. Reports preserve the approver, target, operation, response, verification, and remaining coverage.
+- **Clear outcomes:** verified removed, access remains, partially verified, verification failed, and not checked stay distinct. A verified GitHub permission does not clear other systems.
 
-A completed real scan automatically queues eligible, unprotected findings for its requesting administrator’s confirmed email. Delivery runs on the application server after authenticated worker polling; the agent and worker receive neither Resend credentials nor private review tokens. There is no manual send step in the normal flow. **Email me this proposal** remains available to request a fresh link. Manual requests can only address the signed-in administrator’s own confirmed Supabase email; callers cannot supply an arbitrary recipient. Configure `RESEND_API_KEY` and `APPROVAL_EMAIL_FROM`. No Gmail OAuth or inbox access is needed: Resend sends the message to the administrator’s mailbox.
+## Supported today
 
-The HTML email uses React Email and Tailwind with a plain-text fallback. Both show the person, GitHub username, organization, proposed change, expiry, and a clear review action. Technical resource identifiers and execution details stay in the authenticated evidence report. The private review uses concise decision-focused copy. Email clients use a safe font fallback when Neue Montreal is unavailable.
+| Capability                                                       | Status                                                                |
+| ---------------------------------------------------------------- | --------------------------------------------------------------------- |
+| GitHub organization membership and outside-collaborator checks   | Implemented with real provider APIs.                                  |
+| Controlled organization-member removal                           | Tested end to end with human approval and an independent rescan.      |
+| Switch-led investigation and room follow-up                      | Tested with Codex and Mattermost; also tested against the hosted app. |
+| Automatic proposal emails                                        | Implemented and received in the controlled workflow.                  |
+| Verification receipt email                                       | Template tested; automatic result delivery is planned.                |
+| Vercel access checks, other providers, administrator invitations | Planned.                                                              |
 
-The URL has a random 256-bit capability in its fragment, which is removed from the address bar on page load. Only its SHA-256 hash is stored. It is not a dashboard session and grants no other permissions. The review API accepts same-origin JSON POST only; opening the page/email does not approve anything. The recipient must explicitly review and approve or reject. If the provider identity is still unconfirmed, approval also requires a separate identity checkbox; the server records that exact identity association atomically with the decision. Opening or previewing the link never confirms identity. Tokens are kept only in browser memory, never local storage; review pages prohibit framing, referrer transmission, and indexing.
+V1 has one configured administrator and a deliberately restricted GitHub test scope. Email may reach Spam. The current GitHub check does not cover enterprise permissions, pending invitations, other organizations, or other services. See the [setup guide](docs/setup.md#authorization-jobs-and-evidence) for operational details.
 
-Each link lasts 15 minutes and allows one decision. Its finding must also remain fresh. When an eligible pending review becomes stale, the app can queue one genuine read-only refresh; approval stays unavailable until the result is fresh and the target still matches. **Refresh check** reloads the saved review state. The server rechecks the recipient’s confirmed email/current administrator role, immutable target, account protection, provider identity match, explicit identity acknowledgement when needed, and finding freshness. A changed target, expired/used link, ambiguous email submission, or newer dashboard decision fails closed. Requests are limited to one per minute per administrator. The durable queue deduplicates recent proposals. A crashed sender becomes uncertain and is never automatically retried; provider rejection or changed/ineligible targets remain explicit failures or skips. Mail submission cannot change a scan or removal result. Link possession authenticates this narrow decision: forwarding it grants the holder that capability, so keep it private. Agents receive neither the link secret nor any approval tool.
-
-Both email and dashboard decisions use the same transactional approval rules. Reports record the administrator and authorization channel. The worker still checks and consumes the approval once, performs a fresh provider preflight, and independently rescans. Resend acceptance, the human decision, provider execution, and verified removal are separate persisted states. **Resend acceptance is not proof of inbox delivery.** Timeouts or unsaved acceptance leave the link unusable; the app never automatically resends an uncertain submission. After fixing the cause, request a fresh link.
-
-For deployment set `OFFBOARD_APP_URL` to the public HTTPS origin before sending email. The local test link works only on a device that can reach the development app. Disable email click tracking for approval messages to preserve private review URLs. See the official [Resend send-email API](https://resend.com/docs/api-reference/emails/send-email) and [domain verification guide](https://resend.com/docs/dashboard/domains/introduction).
-
-Claims use row locks and `SKIP LOCKED`; one approval can create only one execution job and one operation. A worker issues DELETE only after a positive approval-consumption acknowledgement. It never automatically retries DELETE. A lost response or expired destructive lease stays uncertain. Read-only jobs have bounded lease retries. Repeated completion submissions cannot create duplicate evidence.
-
-After a provider operation, a separate scan checks the exact permission. If an accepted removal's immediate check still reports access, one persisted read-only follow-up is queued; it never repeats DELETE. The new report preserves the original approval and operation evidence alongside the fresh check, and the original report remains unchanged. Reports distinguish **verified removed**, **access remains**, **verification failed**, **partially verified**, and **not checked**. Missing or incomplete coverage cannot establish absence. Even a verified GitHub removal leaves the case partially verified: enterprise permissions, pending invitations, other organizations, Vercel, and other services remain outside this connector’s coverage. GitHub’s username-addressed mutation API cannot make preflight and deletion one atomic provider transaction; keep test grants explicitly controlled.
-
-For an uncertain job, inspect its report and perform a new read-only investigation before proposing another correction. There is no automatic destructive recovery or global “all access cleared” status. Reports and audit records are not editable through the application; a database administrator remains privileged.
-
-Pending-job views refresh saved records automatically while queued or leased work exists. Case-form validation identifies the invalid field and preserves the entered values. Native controls use Tailwind’s dark color-scheme utility.
-
-Worker availability is based on a recent saved heartbeat. It says nothing about whether the separate Codex agent is online. The interface does not claim continuous agent availability.
-
-## Switch and Mattermost
-
-Install the official [Switch Console](https://docs.switchagents.ai/switch-rooms/getting-started/install-switch-console), with Docker running. Select **On this computer**, then [configure the Codex provider](https://docs.switchagents.ai/switch-rooms/getting-started/set-up-agent-providers), [onboard an agent](https://docs.switchagents.ai/switch-rooms/getting-started/onboard-agents), and [create a room](https://docs.switchagents.ai/switch-rooms/getting-started/create-a-room).
-
-The tested local setup used Console 0.40.1, Switch server 0.31.0, Codex CLI 0.167.0, and Mattermost. Agent `offboard` has a dedicated ignored directory `.local/switch-agent`. Auto mode is on with the user’s explicit approval; Bypass permissions and agent management remain off. Its audience is owner-only. The project configuration disables shell tools, app connectors, and unrelated inherited MCP servers. It has no GitHub credential, Supabase secret, worker token, or approval tool.
-
-Room `security-offboarding` is a genuine Mattermost-backed room. The local setup selected `http://localhost:52426/switch/channels/security-offboarding`; ports may change after recreating the server. A real role/connectivity response and a later complete read-only investigation were received. The later agent used `inspect_case`, `request_scan`, and `get_job`; its findings matched the saved GitHub report.
-
-Room/agent instructions must require: investigate only through restricted application tools; discuss saved findings; never fabricate evidence; never approve an action; use authenticated dashboard or private email review for human decisions; preserve unchecked and failed coverage; never disclose credentials. The adapter re-reads room details and conversation history from the authenticated Switch API before each application call. It requires a real message from the configured human sender, an explicit case UUID, the configured Mattermost room/agent, and an allowlisted case. A notification relay alone is insufficient.
-
-### Restricted investigation tools
-
-Copy `.env.switch.example` to `.env.switch` and set its permissions to `600`. This file is read only by the local MCP subprocess; do not load the web app’s `.env` into the agent. It contains the app URL, a separate `OFFBOARD_SWITCH_TOKEN`, the existing agent credential-file path, one room ID, one agent ID, the authorized human’s exact Switch transport sender ID, and explicit case UUIDs. The web server’s `.env` must contain the same token/scope values plus `OFFBOARD_SWITCH_INTEGRATION_ID`. Its existing `OFFBOARD_ADMIN_EMAIL` must identify a current administrator profile. Keep the worker token different.
-
-Find IDs through the authenticated Switch `list_rooms`, `get_room_detail`, and `read_context` operations, using the installed version’s [agent protocol](https://docs.switchagents.ai/switch-rooms/internals/agent-protocol). Match the actual sender ID in saved context; names supplied by an LLM are insufficient. Console-managed agent credentials in the tested release live under `~/Library/Application Support/switchdash/agent-controller/servers/<server ID>/agents/<agent ID>/credentials.json`. Some Console agent types use `.switch/agents/<name>.json` in their working directory. Point to the existing agent-specific file; do not paste its contents into chat. No new Switch registration or broad provider credential is required.
-
-Create `.local/switch-agent/.codex/config.toml`, replacing paths with your installation’s absolute paths:
-
-```toml
-web_search = "disabled"
-[features]
-shell_tool = false
-apps = false
-multi_agent = false
-[mcp_servers.offboard]
-command = "/absolute/path/to/node-24"
-args = ["--import", "tsx", "/absolute/path/to/offboard/agent/src/server.ts"]
-cwd = "/absolute/path/to/offboard/.local/switch-agent"
-enabled_tools = ["inspect_case", "request_scan", "get_job"]
-[mcp_servers.switch]
-enabled_tools = ["read_context", "list_rooms", "get_room_detail", "list_participants", "post_message", "send_targeted_message", "connect_to_room"]
-```
-
-Disable every unrelated inherited MCP server in this project config with its own `[mcp_servers.<name>]` and `enabled = false`. Review the effective tool catalog before using real cases. Mark only the dedicated directory trusted in the Codex user configuration. In Switch Console 0.40.1, Auto mode off forces that directory untrusted and suppresses project MCP configuration; use Auto mode with explicit operator approval, keep Bypass off, then restart the agent. [Agent settings](https://docs.switchagents.ai/switch-rooms/getting-started/agent-settings) and [Codex MCP configuration](https://learn.chatgpt.com/docs/extend/mcp) describe these controls. The application’s removal authorization remains independent of that provider permission mode.
-
-The local subprocess has exactly three application tools. It exposes no shell, identity-confirmation, approval, provider mutation, or arbitrary HTTP tool. `request_scan` requires a room request no older than 15 minutes; saved-result reads accept that source for 24 hours. Every call rechecks Switch context and the app validates a fresh adapter attestation, configured scope, and current administrator mapping. A unique database key makes one room/message reuse its original scan job. Pending work and unavailable services remain pending or failed.
-
-The bridge bearer credential is a trusted local service credential, not a signed message from Switch. Its holder can attest room context, so protect `.env.switch`, the adapter code, and the host. The model sees tool results, not that credential. Running processes under the same OS user is not strong host isolation; a future multi-user deployment needs a separately controlled service identity/runtime. Only explicitly allowlisted synthetic/test cases are enabled in the tested setup.
-
-Run the app and provider worker, keep Switch/agent running, then send `@offboard investigate <case UUID>` in the configured Mattermost room. The agent reads saved context, inspects the case, requests one scan, reads its job/report, and discusses the actual evidence and dashboard links. Case pages identify Switch-origin jobs; reports retain the verified source-message context. A subsequent explicit human dashboard or private-email approval is still required for any correction.
-
-If Codex sign-in expires, renew the existing login with `codex login`. Console may retain a stale session authentication copy; the tested release copies sign-in into `~/.local/state/switch/sdk-sessions/<session hash>/provider-home/<session hash>/`. Stop the affected agent before refreshing that cache, preserve old files privately, and restart. Never paste authentication contents into logs or chat.
-
-## Validation
+## Development
 
 ```sh
-npm run check
-npm run build
-
-# Opt-in: real database functions and roles, all fixture records rolled back.
-npm run db:test
-
-# Opt-in: real Auth, app endpoints, GitHub scan, and persisted evidence; no DELETE.
-# Requires the local app running and a confirmed configured administrator.
-npm run test:live:read-only -- --github-cli-auth
+npm run check       # formatting, lint, types, and offline tests
+npm run build       # production build
+npm run db:test     # opt-in PostgreSQL checks; fixtures roll back
 ```
 
-Offline tests use synthetic provider fixtures strictly inside tests. The live read-only check generates and consumes an in-memory administrator Auth link without sending email or changing a password, bootstraps only the configured confirmed administrator, records a clearly named protected-account test case, queues genuine provider checks, and inspects the saved report. It does not test browser rendering or substitute for a live removal demonstration. Stop other worker processes while running this diagnostic. It refuses active mutation jobs, supplies no removal adapter, and requires a report for the exact scan job created by that run.
+The latest completed validation passed **70 offline tests** and **110 PostgreSQL safety checks**. Hosted checks also confirmed protected routes, separate service permissions, and refusal of unauthorized removal and approval requests. Live provider tests are separate and require explicitly authorized resources.
 
-Latest validation: 70 offline tests and 110 real PostgreSQL safety checks passed, with database fixtures rolled back. Formatting, lint, types, and the production build passed. Live unauthorized worker and bridge approval requests were refused. These checks complement the recorded controlled removal; they do not establish an untested provider or hosted deployment.
-
-Production uses the supported Webpack build option because this environment restricted Turbopack’s internal PostCSS port. TypeScript is pinned to 6.0 while the lint parser adds TypeScript 7 support. Narrow minimatch overrides patch [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249); remove them when upstream dependencies resolve to patched versions. Some nested Next.js lint plugins emit ESLint 10 peer-range warnings.
-
-## Controlled demonstration
-
-1. Create a separate test GitHub account you control, or use an existing disposable non-owner account. Complete its verification, invite it as an ordinary organization member, and accept the invitation. Do not use the owner/integration account. Record its stable ID in the worker’s removal allowlist only after authorizing that test grant.
-2. Start the app, worker, Switch, Mattermost, and Codex. Confirm worker connectivity and the agent’s actual availability separately.
-3. Create the departure case. Begin the investigation by asking the agent in `security-offboarding` to scan that case. Use `@offboard investigate <case UUID>`; the case must be included in the adapter’s allowlist.
-4. Inspect the real saved findings discussed in the room. The eligible proposal is automatically emailed to the confirmed administrator. Confirm the exact provider identity in the dashboard or the private review.
-5. Demonstrate an unauthorized request being refused. Then explicitly approve the exact controlled grant through the authenticated dashboard or private email review.
-6. Observe the worker’s provider operation and independent scan; inspect the saved target, approver, provider response, timestamps, and remaining coverage.
-7. Have the agent report that same saved outcome in the room. Keep an unavailable provider marked unresolved.
-
-The complete Switch-led controlled journey passed on 7 November. Its genuine room request produced a Switch-origin scan, an automatic email proposal, an explicit human approval, an actual restricted removal, independent verification and the real agent’s result in the same thread. Earlier separate read-only and dashboard/email runs remain historical evidence; they were not substituted for this completed journey.
-
-### Complete Switch-led removal — 7 November 2026
-
-| Evidence                   | Saved record / UTC time                                                                                                                   |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Human room request         | [Original thread](http://localhost:52426/switch/pl/r9jnxn68pbbbbcqkysgrjgqmkc) · 14:16                                                    |
-| Real agent scan            | `4c6ddc4d-8de7-4922-9ea1-f0f4dad32976` · 14:21:42 · Switch origin                                                                         |
-| Saved findings             | `6dc2af74-6d23-4b96-8140-085b4e7eec9e` · access detected                                                                                  |
-| Automatic email            | `833135b8-7cac-4226-9d6c-c2b1319b7792` · Resend accepted                                                                                  |
-| Human email approval       | `1f66cba7-02f3-456f-badb-059b0ea85ae1` · 14:23:44 · consumed once                                                                         |
-| Actual operation           | `ee903325-db40-4b79-add2-7d6b265d2136` · GitHub HTTP 204 at 14:23:48                                                                      |
-| Immediate verification     | `04442243-5752-49b8-94cd-1dc211a8764b` · access remains; preserved                                                                        |
-| Independent follow-up      | [Verified membership removal](http://127.0.0.1:3000/reports/5ed69f67-52e5-44a5-a7f5-b362e995b169) · 14:23:58 · partially verified overall |
-| Genuine agent confirmation | [Same-thread result](http://localhost:52426/switch/pl/fbc36mamgf8kjqyak845kj1y7w) · 14:25                                                 |
-
-A separate read-only GitHub member-list check also found the controlled account absent; the protected integration account remained an active owner. When access is rediscovered in a later scan, its finding no longer inherits an old removal-verification date. Historical reports remain unchanged.
-
-### Earlier dashboard/email removal — 7 November 2026
-
-| Evidence             | Saved record / UTC time                                                                                                                   |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Controlled case      | `8633dd87-a673-4cfb-8def-b7cb5179fab7`                                                                                                    |
-| Human email approval | `eba3b438-d87f-4eea-b598-35da679d7a9f` · 13:34:37                                                                                         |
-| GitHub operation     | `956e03f2-ec2c-435a-9326-bf85e9dc67ae` · HTTP 204 at 13:34:40                                                                             |
-| Immediate report     | `ebae41d1-0970-462b-91a9-fb16406b0f8d` · access remains                                                                                   |
-| Read-only follow-up  | `6a20ee60-cb04-4f88-a1f1-c44e706d2f22`                                                                                                    |
-| Final report         | [Verified membership removal](http://127.0.0.1:3000/reports/5d0c1c26-78fc-47ca-9e55-0aefa2423e62) · 13:40:37 · partially verified overall |
-
-A redesigned verification receipt was sent for this saved result; Resend subsequently reported `delivered`. The user then located it in Gmail Spam and supplied its rendered screenshot, alongside GitHub's own organization-removal notification. These emails support the saved independent rescan; neither replaces it. Automatic proposal delivery is implemented; automatic result receipts are not implemented.
-
-The sender-domain check found `paayee.org` verified in Resend, its SPF/DKIM records verified, a published DMARC monitoring policy, and open/click tracking disabled. This checks sender configuration, not the authentication headers of the received message or Gmail's reason for its placement. Use the deployed public HTTPS origin in email links before the next delivery test. Follow the [Resend Gmail deliverability guide](https://resend.com/guides/email/deliverability/avoid-gmail-spam-folder); no configuration guarantees inbox placement.
-
-The fresh ordinary-member invitation was accepted, investigated through Switch, explicitly approved by the user and removed in the completed journey above. That membership is absent again. A new removal recording needs a newly accepted test grant; alternatively, clearly distinguish a live read-only demonstration from a walkthrough of the saved removal evidence. Record actual saved reports, real provider state, and genuine room messages. Keep passwords, environment files, and complete private approval URLs out of the recording. The earlier immediate “access remains” result is useful evidence of independent checking; it must not be hidden or rewritten.
-
-### Demo readiness and evidence
-
-The official [schedule](https://www.wemakedevs.org/hackathons/switch/schedule) lists submissions closing **7 November 2026, 11:59 PM IST — 7:29 PM Africa/Lagos**. The [challenge page](https://www.wemakedevs.org/hackathons/switch) requires a real human/agent workflow with Switch central to it. The user-provided submission-form screenshots specify:
-
-| Material           | Requirement                                                                                                                              |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| Project details    | Title, selected track, and description of the problem and intended users.                                                                |
-| Repository         | Public project repository with a README explaining setup, connected agents, channel configuration, and how to run the workflow.          |
-| Video              | **Under 3 minutes**, hosted on **YouTube or Loom**, public or unlisted. Show the agent working in a real chat with teammates.            |
-| Switch explanation | Which agent, which chat platform, what real work it performs, and how people collaborate with it.                                        |
-| Switch feedback    | What worked, what got in the way, and what should improve.                                                                               |
-| Deployment         | Optional in the submission form; still an agreed project goal.                                                                           |
-| Extras             | Optional blog and #HowISwitch post. A Wispr usage card is conditional on Code with Wispr; PR links are conditional on Core Contribution. |
-
-The complete combined workflow is verified and the application is hosted. Final running-workflow footage still needs to be recorded. The article is a draft, not a published blog link. The existing GitHub repository is private; public visibility and video publication remain outstanding.
-
-- The genuine room-initiated controlled investigation, human approval, real removal, independent verification and agent result reply have passed. Record the running workflow and clearly identify the exact grant/run shown.
-- Hosted sign-in, access guards and the real room investigation passed; the local worker and restricted Switch adapter use the HTTPS origin. Complete the final visual review before recording.
-- Complete the final keyboard, mobile and error-state review; record actual unauthorized-action refusal and show unavailable providers remaining unchecked.
-- Publish a reviewed repository and README, prepare shareable evidence images, record the video, and verify judges can open the links. Registration and final entry are performed by the participant, in accordance with the [official rules](https://www.wemakedevs.org/hackathons/switch/rules).
-
-Twenty-six original screenshots are retained locally under `.local/demo-evidence/originals/`, indexed by `.local/demo-evidence/evidence-manifest.json` with source descriptions and SHA-256 hashes. The archive is ignored by Git. It includes historical errors, design/setup references, genuine application/room captures, the human approval screenshot, both removal emails, six submission-form references, three captures of the completed Switch-led journey, and the hosted read-only check. Older images expose private approval links or inbox information. Keep originals unchanged; publish only separately reviewed copies. The README image is a reviewed copy of the genuine hosted check and contains no private approval link. Historical/reference images must not be presented as a new successful run.
-
-## Deployment and structure
-
-The application is deployed at **https://offboard-mu.vercel.app** on Node.js 24. The administrator confirmed sign-in and saved reports; hosted endpoints reject unauthorized worker requests, agent approval attempts, foreign-origin email decisions, and GET decisions. The local adapter verified genuine Switch room context and retrieved the saved removal evidence through the hosted app. This checks read access; the historical removal above happened before hosting.
-
-A fresh hosted read-only investigation then passed at **14:50:58 UTC on 7 November**: Switch-origin job `ba2e7b5c-a6d9-4ce4-b23b-317f91f433ca`, report `ab78d48a-abf6-4c49-8e04-5c06e5c89b90`. The agent replied in the [real Mattermost thread](http://localhost:52426/switch/pl/9phtkrqhubf1tgsmw9yiapjbjw) with the hosted report link, protected-owner finding and unchecked coverage. The worker’s heartbeat and actual scan completion were verified in Supabase. That local chat link is available only while the demo runtime is running.
-
-To reproduce deployment:
-
-1. Link a Vercel project, select the Next.js preset and Node.js 24, and use `npm run build`. The `.vercelignore` allowlist uploads web source and build configuration; private notes, original evidence, environment files, and local agent credentials are excluded.
-2. Add the two public Supabase settings, `OFFBOARD_ADMIN_EMAIL`, and the configured `OFFBOARD_SWITCH_*` scope. Store `SUPABASE_SECRET_KEY`, `OFFBOARD_WORKER_TOKEN`, `OFFBOARD_SWITCH_TOKEN`, and `RESEND_API_KEY` as sensitive server secrets. Set `APPROVAL_EMAIL_FROM` for a verified sender and `OFFBOARD_APP_URL` to the production HTTPS origin. Do not upload `GITHUB_ACCESS_TOKEN` or `SUPABASE_DB_URL`.
-3. Deploy production. Stop the old polling worker, update `OFFBOARD_APP_URL` in the local worker environment and `.env.switch`, and restart one worker with matching separate worker/bridge credentials. Running local sessions must remain online for investigations to progress. The hosted app never calls a laptop's localhost; the adapter verifies Switch context locally and calls the hosted app.
-4. Sign in with the confirmed administrator, check saved records and access guards, and run a real read-only room investigation before attempting another controlled removal. Password sign-in is the implemented Auth flow; if enabling email/OAuth redirects later, configure the production Site URL and redirect allowlist in Supabase as well.
-
-No new hosted removal or hosted approval-email delivery has been tested yet. Existing local review links are historical; new messages use the configured HTTPS origin. A successful web deployment does not implement a Vercel access connector.
-
-For the hackathon, Switch, Mattermost, Codex, and the worker can remain local. Future hosting needs a deployment compatible with Switch/Mattermost’s services, persistent storage, and agent lifecycle. An existing Cloudflare subscription alone does not establish that this stack can run there; no cloud runtime has been provisioned or validated.
-
-- `src/app/`: routes and shared route states; four protected views plus nested case/report screens.
-- `src/components/`: shared navigation and accessible UI pieces.
-- `src/core/`: validated domain contracts and independent safety policy.
-- `src/features/auth/`: authentication actions.
-- `src/features/approvals/`: private email review contract and Tailwind interface.
-- `src/server/`: session authorization, database queries/actions, worker API boundary.
-- `worker/src/`: provider adapters, job executor, authenticated polling, CLI.
-- `agent/src/`: restricted MCP tools, validated configuration, authenticated Switch context checks.
-- `supabase/migrations/`: schema, RLS, transactional approval/job functions, and subsequent fixes.
-- `scripts/`: environment checks, migrations, transactional database tests.
-- `tests/integration/`: explicitly invoked live read-only workflow check.
-- `privates-notes/`: three optional local planning documents, excluded from Git; this README is the public setup reference.
+```text
+src/app/              Routes and four dashboard views
+src/features/         Cases, approvals, and reports
+src/server/           Auth, queries, and application operations
+src/core/             Domain contracts and safety policy
+worker/               Provider checks, execution, and verification
+agent/                Restricted Switch investigation tools
+supabase/migrations/  Schema, RLS, and transactional workflow
+scripts/              Environment, migration, and database checks
+docs/                 Setup guide, build story, and reviewed images
+```

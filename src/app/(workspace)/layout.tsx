@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { LockKeyhole, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { Brand } from "@/components/ui/brand";
 import { WorkspaceNavigation } from "@/components/layout/workspace-navigation";
 import { signOut } from "@/features/auth/actions";
@@ -38,12 +38,6 @@ export default async function WorkspaceLayout({
         </div>
       </aside>
       <div className="min-w-0">
-        <header className="hidden min-h-17 items-center justify-between gap-4 border-b border-border px-5 text-xs text-muted-foreground sm:px-9 lg:flex">
-          <span className="inline-flex items-center gap-2">
-            <LockKeyhole aria-hidden="true" className="size-3.5 text-brand" />
-            Administrator workspace
-          </span>
-        </header>
         <main
           id="main-content"
           className="mx-auto max-w-[1400px] px-5 py-9 sm:px-9 sm:py-12"

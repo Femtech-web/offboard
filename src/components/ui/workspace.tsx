@@ -11,7 +11,7 @@ export function PageHeading({
   description,
   children,
 }: {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   description: string;
   children?: ReactNode;
@@ -19,7 +19,9 @@ export function PageHeading({
   return (
     <div className="mb-9 flex flex-wrap items-end justify-between gap-5">
       <div>
-        <p className="mb-3 text-xs font-medium text-brand">{eyebrow}</p>
+        {eyebrow && (
+          <p className="mb-3 text-xs font-medium text-brand">{eyebrow}</p>
+        )}
         <h1 className="text-3xl font-medium tracking-tight sm:text-4xl">
           {title}
         </h1>
@@ -62,7 +64,7 @@ export function CoverageNotice() {
         className="mt-0.5 size-5 shrink-0 text-attention"
       />
       <div>
-        <p className="text-sm font-medium">Coverage stays explicit.</p>
+        <p className="text-sm font-medium">What’s covered</p>
         {scopeLimitations.map((text) => (
           <p
             key={text}
@@ -84,8 +86,8 @@ export function OperationError({ error }: { error?: string }) {
       {error === "input"
         ? "Check the form values and try again."
         : error === "email"
-          ? "The email review could not be confirmed. Check the saved email status, Resend configuration, identity confirmation, and finding freshness. Requests are limited to one per minute. No approval was recorded."
-          : "The operation was refused or could not be saved. Check identity confirmation, account protection, approval expiry, and whether a job is already pending. No successful action is being claimed."}
+          ? "We couldn’t send a new review link. Check the email status and latest access check, then try again in a minute."
+          : "This action couldn’t be completed. Check the account confirmation, approval expiry, and any pending checks, then try again."}
     </p>
   ) : null;
 }

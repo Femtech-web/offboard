@@ -16,7 +16,7 @@ import {
   PageHeading,
 } from "@/components/ui/workspace";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { formatDate, humanize } from "@/lib/format";
+import { activityLabel, actorLabel, formatDate } from "@/lib/format";
 
 export default async function OverviewPage() {
   const records = await workspaceRecords();
@@ -48,7 +48,7 @@ export default async function OverviewPage() {
       label: "Open cases",
       value: records.cases.length,
       icon: UsersRound,
-      note: "All cases retain incomplete coverage",
+      note: "Departures still under review",
     },
     {
       label: "Remaining access risks",
@@ -57,13 +57,13 @@ export default async function OverviewPage() {
           !["verified_removed", "not_detected"].includes(finding.status),
       ).length,
       icon: ShieldAlert,
-      note: "Saved findings awaiting resolution",
+      note: "Access that still needs review",
     },
     {
       label: "Pending approvals",
       value: pending.length,
       icon: Clock3,
-      note: "Confirmed, unprotected findings awaiting a decision",
+      note: "Access changes ready for your decision",
     },
     {
       label: "Verified removals",
@@ -71,7 +71,7 @@ export default async function OverviewPage() {
         (operation) => operation.status === "verified_removed",
       ).length,
       icon: CircleCheck,
-      note: "Exact permissions independently rechecked",
+      note: "Removals confirmed by a fresh check",
     },
   ];
   const workerOnline =
@@ -85,8 +85,7 @@ export default async function OverviewPage() {
         )}
       />
       <PageHeading
-        eyebrow="Your security workspace"
-        title="Every exit. In clear view."
+        title="Overview"
         description="Follow the cases, decisions, and evidence that need your attention."
       >
         <Link
@@ -125,17 +124,17 @@ export default async function OverviewPage() {
           <ScanLine className="size-5 text-brand" aria-hidden="true" />
           <div>
             <p className="text-sm font-medium">
-              Provider worker{" "}
-              {workerOnline ? "recently connected" : "has no recent heartbeat"}
+              {workerOnline
+                ? "Access checks connected"
+                : "Access checks have no recent connection"}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
-              Last heartbeat: {formatDate(records.heartbeat?.last_seen_at)}
+              Last connected: {formatDate(records.heartbeat?.last_seen_at)}
             </p>
           </div>
         </div>
         <p className="max-w-sm text-xs leading-6 text-muted-foreground">
-          This describes the worker only. Switch agent availability is not
-          monitored yet.
+          For chat investigations, keep the Offboard agent running in Switch.
         </p>
       </div>
       <section className="mb-9" aria-labelledby="cases-heading">
@@ -188,11 +187,12 @@ export default async function OverviewPage() {
                     />
                   </div>
                   <div>
-                    <p className="text-sm capitalize">
-                      {humanize(event.event_type)}
+                    <p className="text-sm">
+                      {activityLabel(event.event_type, event.data.kind)}
                     </p>
                     <p className="mt-1 text-xs leading-5 text-muted-foreground">
-                      {event.actor_type} · {formatDate(event.created_at)}
+                      {actorLabel(event.actor_type)} ·{" "}
+                      {formatDate(event.created_at)}
                     </p>
                   </div>
                 </li>

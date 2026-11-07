@@ -20,9 +20,8 @@ export default async function ReportsPage() {
         )}
       />
       <PageHeading
-        eyebrow="Verification Reports"
-        title="The record behind the result."
-        description="Inspect what was discovered, who authorized a correction, what the provider returned, and what a fresh check actually verified."
+        title="Verification reports"
+        description="Review access findings, approvals, removals, and the checks that followed."
       />
       <div className="mb-8">
         <CoverageNotice />
@@ -57,12 +56,9 @@ export default async function ReportsPage() {
           ))}
         </div>
       ) : (
-        <EmptyState
-          icon={FileCheck2}
-          title="Evidence starts with a real check."
-        >
-          Reports appear after a worker records an investigation or removal
-          outcome. There are no sample reports.
+        <EmptyState icon={FileCheck2} title="No verification reports yet">
+          Reports appear after an access check or removal. Start an
+          investigation from a case to create the first report.
         </EmptyState>
       )}
     </>
