@@ -81,6 +81,6 @@ The agent also noticed that a rediscovered grant still carried the finding's ear
 
 The web app is deployed on Vercel with Supabase. A fresh human room request also passed through the hosted app, local worker, real GitHub enumeration, saved report and Codex's reply with an HTTPS report link. This was a protected-account read-only check; the controlled removal described above happened before hosting.
 
-Automatic proposal emails work; the earlier verification receipt described above was sent once for its saved result, rather than by an automatic result-mail feature. Setup, environment boundaries, migrations, worker configuration, and the actual Switch room/tool setup are documented in the [README](../../README.md). Hosting the application on Vercel does not add a Vercel access connector.
+Automatic proposal emails work; the earlier verification receipt described above was sent once for its saved result, rather than by an automatic result-mail feature. Setup, environment boundaries, migrations, worker configuration, and the actual Switch room/tool setup are documented in the [README](https://github.com/Femtech-web/offboard#how-we-use-switch). Hosting the application on Vercel does not add a Vercel access connector.
 
 Additional providers and administrator invitations can follow. The core result is a shared investigation and a human-controlled access correction the team can independently verify.

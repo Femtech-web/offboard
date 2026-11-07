@@ -705,6 +705,86 @@ try {
       await transaction`select status from public.approval_email_dispatches where id=${queuedEmail!.id}`;
     assert.equal(uncertainMail!.status, "unknown");
     checks += 1;
+    // A public judge account can inspect only its granted case, without raw-table access.
+    await role("postgres");
+    await transaction`update auth.users set email='test-viewer@example.invalid',email_confirmed_at=now() where id=${viewerId}`;
+    await transaction`insert into public.reviewer_case_access(reviewer_id,case_id,expires_at) values(${viewerId},${caseId},now()+interval '1 hour')`;
+    await role("authenticated", viewerId);
+    const [reviewAccess] =
+      await transaction`select public.offboard_can_review() as permitted`;
+    assert.equal(reviewAccess!.permitted, true);
+    const [review] =
+      await transaction`select public.offboard_review_workspace() as records`;
+    const reviewRecords = review!.records;
+    assert.deepEqual(
+      reviewRecords.cases.map((record: { id: string }) => record.id),
+      [caseId],
+    );
+    for (const table of ["reports", "identities", "jobs", "events"]) {
+      assert.ok(
+        reviewRecords[table].every(
+          (record: { case_id: string }) => record.case_id === caseId,
+        ),
+      );
+      checks += 1;
+    }
+    assert.ok(reviewRecords.jobs.length > 0);
+    assert.ok(
+      reviewRecords.jobs.every(
+        (job: Record<string, unknown>) =>
+          !("lease_token" in job) && !("worker_id" in job),
+      ),
+    );
+    assert.equal("approvalEmails" in reviewRecords, false);
+    assert.equal("emailDispatches" in reviewRecords, false);
+    assert.equal(
+      (await transaction`select * from public.worker_jobs`).length,
+      0,
+    );
+    assert.equal(
+      (await transaction`select * from public.approval_email_requests`).length,
+      0,
+    );
+    assert.equal(
+      (await transaction`select * from public.offboarding_cases`).length,
+      0,
+    );
+    checks += 9;
+    await denied("reviewer cannot expand its case scope", async (sp) => {
+      await sp`insert into public.reviewer_case_access(reviewer_id,case_id,expires_at) values(${viewerId},${caseId},now()+interval '2 hours') on conflict(reviewer_id,case_id) do update set expires_at=excluded.expires_at`;
+    });
+    await denied("reviewer cannot reconnect an integration", async (sp) => {
+      await sp`select public.offboard_connect_github('controlled-test-org')`;
+    });
+    await denied("reviewer cannot request scans", async (sp) => {
+      await sp`select public.offboard_request_scan(${caseId}::uuid,${integrationId}::uuid)`;
+    });
+    await denied("reviewer cannot confirm identities", async (sp) => {
+      await sp`select public.offboard_confirm_identity(${identity!.id}::uuid,'42')`;
+    });
+    await denied("reviewer cannot approve removals", async (sp) => {
+      await sp`select public.offboard_decide_removal(${findingId}::uuid,'approved')`;
+    });
+    await denied("reviewer cannot request approval emails", async (sp) => {
+      await sp`select public.offboard_request_approval_email(${findingId}::uuid,${"e".repeat(64)})`;
+    });
+    await role("postgres");
+    await transaction`update public.reviewer_case_access set expires_at=now()-interval '1 second' where reviewer_id=${viewerId}`;
+    await role("authenticated", viewerId);
+    const [expiredReview] =
+      await transaction`select public.offboard_can_review() as permitted`;
+    assert.equal(expiredReview!.permitted, false);
+    checks += 1;
+    await denied(
+      "expired reviewer grant cannot read saved evidence",
+      async (sp) => {
+        await sp`select public.offboard_review_workspace()`;
+      },
+    );
+    await role("anon");
+    await denied("anonymous cannot read reviewer evidence", async (sp) => {
+      await sp`select public.offboard_review_workspace()`;
+    });
     console.info(
       `${checks} database safety checks passed. All test records are rolled back; no provider API was called.`,
     );

@@ -28,7 +28,12 @@ export async function signIn(formData: FormData) {
     .select("role")
     .eq("id", data.user.id)
     .single();
-  if (profile?.role !== "admin") {
+  const reviewer =
+    profile?.role === "viewer" ? await client.rpc("offboard_can_review") : null;
+  if (
+    profile?.role !== "admin" &&
+    (reviewer?.error || reviewer?.data !== true)
+  ) {
     await client.auth.signOut();
     redirect("/sign-in?error=access");
   }

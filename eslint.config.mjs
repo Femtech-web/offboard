@@ -52,5 +52,6 @@ export default defineConfig([
     "next-env.d.ts",
     "privates-notes/**",
     ".local/**",
+    "marketing/offboard-film/**",
   ]),
 ]);

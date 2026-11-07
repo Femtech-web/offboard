@@ -30,6 +30,7 @@ export default async function CaseDetailPage({
   const { caseId } = await params;
   if (!z.uuid().safeParse(caseId).success) notFound();
   const records = await workspaceRecords();
+  const canManage = records.profile.role === "admin";
   const offboardingCase = records.cases.find((record) => record.id === caseId);
   if (!offboardingCase) notFound();
   const { error } = await searchParams;
@@ -64,7 +65,11 @@ export default async function CaseDetailPage({
       <PageHeading
         eyebrow={`Departure · ${formatDate(offboardingCase.departure_on, false)}`}
         title={offboardingCase.full_name}
-        description="Confirm the person, investigate their access, and review each proposed correction."
+        description={
+          canManage
+            ? "Confirm the person, investigate their access, and review each proposed correction."
+            : "Review the account, decisions, and saved verification evidence."
+        }
       >
         <StatusBadge status={offboardingCase.status} />
       </PageHeading>
@@ -94,7 +99,7 @@ export default async function CaseDetailPage({
                   <p className="mt-4 text-xs leading-6 text-muted-foreground">
                     Account confirmed on {formatDate(identity.confirmed_at)}.
                   </p>
-                ) : identity.provider_user_id ? (
+                ) : canManage && identity.provider_user_id ? (
                   <form
                     action={confirmIdentity}
                     className="mt-5 border-t border-border pt-5"
@@ -122,8 +127,9 @@ export default async function CaseDetailPage({
                   </form>
                 ) : (
                   <p className="mt-5 text-xs leading-6 text-muted-foreground">
-                    Run an access check to find this account before confirming
-                    it.
+                    {canManage
+                      ? "Run an access check to find this account before confirming it."
+                      : "This account has not been confirmed by an administrator."}
                   </p>
                 )}
               </>
@@ -214,7 +220,7 @@ export default async function CaseDetailPage({
                             </p>
                           </div>
                         </div>
-                      ) : actionable && identity?.confirmed_at ? (
+                      ) : canManage && actionable && identity?.confirmed_at ? (
                         <div className="mt-6 border-t border-border pt-5">
                           <p className="text-sm font-medium">
                             Review the exact proposal
@@ -276,13 +282,13 @@ export default async function CaseDetailPage({
                             </button>
                           </form>
                         </div>
-                      ) : actionable ? (
+                      ) : canManage && actionable ? (
                         <p className="mt-5 text-xs leading-6 text-attention">
                           Confirm the provider identity here or through its
                           private email review before approving a removal.
                         </p>
                       ) : null}
-                      {!blocked && actionable && (
+                      {canManage && !blocked && actionable && (
                         <form
                           action={requestApprovalEmail}
                           className="mt-6 border-t border-border pt-5"
@@ -411,56 +417,61 @@ export default async function CaseDetailPage({
           </section>
         </div>
         <aside className="space-y-6">
-          <section className="rounded-xl border border-border bg-surface p-6">
-            <div className="mb-4 flex items-center gap-3">
-              <ScanLine className="size-5 text-brand" aria-hidden="true" />
-              <h2 className="font-medium">Investigate access</h2>
-            </div>
-            <p className="mb-5 text-xs leading-6 text-muted-foreground">
-              Ask Offboard in the security-offboarding room to investigate this
-              case with you, or run an access check below.
-            </p>
-            <p className="mb-2 text-xs text-muted-foreground">
-              Switch room request
-            </p>
-            <code className="mb-5 block rounded-lg border border-border bg-background p-3 text-xs leading-6 break-all select-all">
-              @offboard investigate {caseId}
-            </code>
-            <p className="mb-5 text-xs leading-6 text-muted-foreground">
-              Keep the Offboard agent running in Switch. You’ll review and
-              approve any removal separately.
-            </p>
-            {records.integrations.length ? (
-              <form action={requestScan} className="space-y-4">
-                <input type="hidden" name="caseId" value={caseId} />
-                <label className="block text-xs text-muted-foreground">
-                  Authorized organization
-                  <select
-                    name="integrationId"
-                    className={inputClassName}
-                    required
-                  >
-                    {records.integrations.map((integration) => (
-                      <option key={integration.id} value={integration.id}>
-                        {integration.organization}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <SubmitButton pendingLabel="Queuing…">
-                  Check access
-                </SubmitButton>
-              </form>
-            ) : (
-              <Link
-                href="/integrations"
-                className="text-sm text-brand hover:underline"
-              >
-                <GitBranch className="mr-2 inline size-4" aria-hidden="true" />
-                Connect GitHub first
-              </Link>
-            )}
-          </section>
+          {canManage && (
+            <section className="rounded-xl border border-border bg-surface p-6">
+              <div className="mb-4 flex items-center gap-3">
+                <ScanLine className="size-5 text-brand" aria-hidden="true" />
+                <h2 className="font-medium">Investigate access</h2>
+              </div>
+              <p className="mb-5 text-xs leading-6 text-muted-foreground">
+                Ask Offboard in the security-offboarding room to investigate
+                this case with you, or run an access check below.
+              </p>
+              <p className="mb-2 text-xs text-muted-foreground">
+                Switch room request
+              </p>
+              <code className="mb-5 block rounded-lg border border-border bg-background p-3 text-xs leading-6 break-all select-all">
+                @offboard investigate {caseId}
+              </code>
+              <p className="mb-5 text-xs leading-6 text-muted-foreground">
+                Keep the Offboard agent running in Switch. You’ll review and
+                approve any removal separately.
+              </p>
+              {records.integrations.length ? (
+                <form action={requestScan} className="space-y-4">
+                  <input type="hidden" name="caseId" value={caseId} />
+                  <label className="block text-xs text-muted-foreground">
+                    Authorized organization
+                    <select
+                      name="integrationId"
+                      className={inputClassName}
+                      required
+                    >
+                      {records.integrations.map((integration) => (
+                        <option key={integration.id} value={integration.id}>
+                          {integration.organization}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <SubmitButton pendingLabel="Queuing…">
+                    Check access
+                  </SubmitButton>
+                </form>
+              ) : (
+                <Link
+                  href="/integrations"
+                  className="text-sm text-brand hover:underline"
+                >
+                  <GitBranch
+                    className="mr-2 inline size-4"
+                    aria-hidden="true"
+                  />
+                  Connect GitHub first
+                </Link>
+              )}
+            </section>
+          )}
           <section>
             <h2 className="mb-4 text-sm font-medium">Checks & changes</h2>
             {jobs.length ? (

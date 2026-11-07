@@ -1,0 +1,10 @@
+# Dependencies and generated outputs stay out of Git.
+node_modules/
+out/
+# Reviewed crops and frames are regenerated from ignored local evidence by `pnpm assets`.
+public/footage/
+public/fonts/
+public/audio/
+# Founder voice and any authorised music are supplied locally.
+audio/
+.DS_Store

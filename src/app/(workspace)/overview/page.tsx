@@ -20,6 +20,7 @@ import { activityLabel, actorLabel, formatDate } from "@/lib/format";
 
 export default async function OverviewPage() {
   const records = await workspaceRecords();
+  const canManage = records.profile.role === "admin";
   const now = records.observedAt;
   const pending = records.findings.filter((finding) => {
     const identityConfirmed = records.identities.some(
@@ -63,7 +64,9 @@ export default async function OverviewPage() {
       label: "Pending approvals",
       value: pending.length,
       icon: Clock3,
-      note: "Access changes ready for your decision",
+      note: canManage
+        ? "Access changes ready for your decision"
+        : "Changes awaiting administrator review",
     },
     {
       label: "Verified removals",
@@ -88,13 +91,15 @@ export default async function OverviewPage() {
         title="Overview"
         description="Follow the cases, decisions, and evidence that need your attention."
       >
-        <Link
-          href="/people"
-          className="inline-flex min-h-11 items-center gap-4 rounded-lg bg-brand px-4 text-sm font-medium text-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
-        >
-          Create a case
-          <ArrowUpRight className="size-4" aria-hidden="true" />
-        </Link>
+        {canManage && (
+          <Link
+            href="/people"
+            className="inline-flex min-h-11 items-center gap-4 rounded-lg bg-brand px-4 text-sm font-medium text-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+          >
+            Create a case
+            <ArrowUpRight className="size-4" aria-hidden="true" />
+          </Link>
+        )}
       </PageHeading>
       <div className="mb-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {metrics.map(({ label, value, icon: Icon, note }) => (
@@ -119,24 +124,26 @@ export default async function OverviewPage() {
           </div>
         ))}
       </div>
-      <div className="mb-8 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border px-5 py-4">
-        <div className="flex items-center gap-3">
-          <ScanLine className="size-5 text-brand" aria-hidden="true" />
-          <div>
-            <p className="text-sm font-medium">
-              {workerOnline
-                ? "Access checks connected"
-                : "Access checks have no recent connection"}
-            </p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Last connected: {formatDate(records.heartbeat?.last_seen_at)}
-            </p>
+      {canManage && (
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border px-5 py-4">
+          <div className="flex items-center gap-3">
+            <ScanLine className="size-5 text-brand" aria-hidden="true" />
+            <div>
+              <p className="text-sm font-medium">
+                {workerOnline
+                  ? "Access checks connected"
+                  : "Access checks have no recent connection"}
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Last connected: {formatDate(records.heartbeat?.last_seen_at)}
+              </p>
+            </div>
           </div>
+          <p className="max-w-sm text-xs leading-6 text-muted-foreground">
+            For chat investigations, keep the Offboard agent running in Switch.
+          </p>
         </div>
-        <p className="max-w-sm text-xs leading-6 text-muted-foreground">
-          For chat investigations, keep the Offboard agent running in Switch.
-        </p>
-      </div>
+      )}
       <section className="mb-9" aria-labelledby="cases-heading">
         <div className="mb-5 flex items-center justify-between gap-4">
           <h2 id="cases-heading" className="text-lg font-medium">

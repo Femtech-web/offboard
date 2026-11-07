@@ -47,6 +47,26 @@ In **Supabase → Authentication → Users**, create a confirmed user whose emai
 
 Neue Montreal Regular, Medium, and Bold are loaded locally through `next/font/local`. All page and component appearance uses Tailwind. The global stylesheet contains only Tailwind imports and theme declarations.
 
+### Read-only reviewers
+
+The public judge account is a confirmed Auth user with a `viewer` profile and an expiring grant to the controlled test case. It can inspect the four views and saved case/report details, but cannot create cases, check providers, confirm identities, send review emails, approve or reject changes. Existing administrator RLS and mutation functions still enforce those boundaries. Raw case tables, private email records and job leases are not available to reviewers; a narrow read-only function returns only granted case evidence.
+
+To prepare another reviewer, create a confirmed Auth user, apply all migrations, then run the following as a database administrator in Supabase SQL Editor. Replace the email and case UUID with an account and records you intend to share:
+
+```sql
+insert into public.profiles(id, email, role)
+select id, email, 'viewer' from auth.users
+where lower(email) = 'reviewer@example.com' and email_confirmed_at is not null
+on conflict(id) do nothing;
+
+insert into public.reviewer_case_access(reviewer_id, case_id, expires_at)
+select id, 'CASE_UUID'::uuid, now() + interval '30 days'
+from public.profiles where email = 'reviewer@example.com' and role = 'viewer'
+on conflict(reviewer_id, case_id) do update set expires_at = excluded.expires_at;
+```
+
+An Auth user alone does not grant dashboard access. Removing or expiring its `reviewer_case_access` rows revokes access on the next request. Keep the public demo account separate from `OFFBOARD_ADMIN_EMAIL`; grant it only controlled test records.
+
 ## Provider worker
 
 Run the web app and worker in separate terminals:

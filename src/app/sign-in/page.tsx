@@ -7,7 +7,7 @@ import { supabaseConfigured } from "@/server/supabase/config";
 const errors: Record<string, string> = {
   credentials:
     "Sign-in failed. Check your confirmed email and password, then try again.",
-  access: "This account does not have administrator access to Offboard.",
+  access: "This account does not have access to this workspace.",
   database:
     "Your workspace is not ready. Contact its administrator and try again.",
 };
@@ -42,7 +42,7 @@ export default async function SignInPage({
           </p>
         </div>
         <p className="text-xs text-indigo-100/65">
-          Access is restricted to authorized administrators.
+          Access is restricted to authorized workspace members.
         </p>
       </div>
       <div className="flex items-center justify-center px-6 py-16 lg:p-16">
@@ -56,7 +56,7 @@ export default async function SignInPage({
             Welcome to Offboard.
           </h2>
           <p className="mt-3 text-sm leading-7 text-muted-foreground">
-            Sign in to your administrator workspace.
+            Sign in to your workspace.
           </p>
           {!configured ? (
             <div className="mt-8 rounded-xl border border-attention/25 bg-attention/5 p-5">

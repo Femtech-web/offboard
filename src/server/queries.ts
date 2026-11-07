@@ -1,6 +1,6 @@
 import "server-only";
 import { z } from "zod";
-import { requireAdministrator } from "./auth";
+import { requireWorkspaceMember } from "./auth";
 import {
   caseRecord,
   integrationRecord,
@@ -17,7 +17,32 @@ import {
 } from "@/core/records";
 
 export async function workspaceRecords() {
-  const { client, profile } = await requireAdministrator();
+  const { client, profile } = await requireWorkspaceMember();
+  if (profile.role === "viewer") {
+    const { data, error } = await client.rpc("offboard_review_workspace");
+    if (error) throw new Error("The demo records could not be loaded.");
+    const records = z
+      .object({
+        cases: z.array(caseRecord),
+        integrations: z.array(integrationRecord),
+        findings: z.array(findingRecord),
+        approvals: z.array(approvalRecord),
+        reports: z.array(reportRecord),
+        events: z.array(eventRecord),
+        jobs: z.array(jobRecord),
+        identities: z.array(identityRecord),
+        operations: z.array(operationRecord),
+      })
+      .parse(data);
+    return {
+      ...records,
+      profile,
+      observedAt: Date.now(),
+      heartbeat: undefined,
+      approvalEmails: [],
+      emailDispatches: [],
+    };
+  }
   // Read every page rather than silently treating PostgREST's default row limit as a total.
   async function read<T>(table: string, schema: z.ZodType<T>) {
     const records: T[] = [];

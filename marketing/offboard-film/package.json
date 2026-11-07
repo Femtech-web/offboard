@@ -1,0 +1,33 @@
+{
+  "name": "offboard-film",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "assets": "bash scripts/prepare-assets.sh",
+    "studio": "remotion studio src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "captions": "tsx scripts/make-srt.ts out/offboard-captions.srt",
+    "render:animatic": "remotion render src/index.ts OffboardFilm out/offboard-animatic.mp4 --codec=h264 --pixel-format=yuv420p --audio-codec=aac --audio-bitrate=192k --enforce-audio-track --crf=16",
+    "render:animatic-clean": "remotion render src/index.ts OffboardFilm out/offboard-animatic-nocaptions.mp4 --codec=h264 --pixel-format=yuv420p --audio-codec=aac --audio-bitrate=192k --enforce-audio-track --crf=16 --props='{\"captions\":false}'",
+    "render": "remotion render src/index.ts OffboardFilm out/render-raw.mp4 --codec=h264 --pixel-format=yuv420p --audio-codec=aac --audio-bitrate=320k --enforce-audio-track --crf=16 && bash scripts/master.sh out/render-raw.mp4 out/offboard-demo.mp4",
+    "thumbnail": "remotion still src/index.ts Thumbnail out/thumbnail.png",
+    "contact-sheet": "bash scripts/contact-sheet.sh"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.539",
+    "@remotion/fonts": "4.0.539",
+    "@remotion/media": "4.0.539",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "remotion": "4.0.539",
+    "zod": "4.5.4"
+  },
+  "devDependencies": {
+    "@remotion/bundler": "4.0.539",
+    "@remotion/renderer": "4.0.539",
+    "@types/react": "19.2.2",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3"
+  }
+}

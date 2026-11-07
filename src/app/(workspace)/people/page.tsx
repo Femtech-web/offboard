@@ -15,24 +15,33 @@ export default async function PeoplePage({
 }: {
   searchParams: Promise<{ error?: string }>;
 }) {
-  const { cases, identities } = await workspaceRecords();
+  const { cases, identities, profile } = await workspaceRecords();
+  const canManage = profile.role === "admin";
   const { error } = await searchParams;
   return (
     <>
       <PageHeading
         title="People & offboarding"
-        description="Create a case, review access, and approve the changes you need."
+        description={
+          canManage
+            ? "Create a case, review access, and approve the changes you need."
+            : "Review the controlled offboarding case and its saved access history."
+        }
       >
-        <Link
-          href="#create-case"
-          className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-brand px-4 text-sm font-medium text-ink hover:bg-brand/90 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
-        >
-          <Plus className="size-4" aria-hidden="true" />
-          New case
-        </Link>
+        {canManage && (
+          <Link
+            href="#create-case"
+            className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-brand px-4 text-sm font-medium text-ink hover:bg-brand/90 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+          >
+            <Plus className="size-4" aria-hidden="true" />
+            New case
+          </Link>
+        )}
       </PageHeading>
       <OperationError error={error} />
-      <div className="grid items-start gap-8 xl:grid-cols-[1fr_340px]">
+      <div
+        className={`grid items-start gap-8 ${canManage ? "xl:grid-cols-[1fr_340px]" : ""}`}
+      >
         <section aria-label="Offboarding cases">
           <div className="mb-4 flex items-center justify-between gap-4">
             <h2 className="text-sm font-medium">Offboarding cases</h2>
@@ -71,16 +80,18 @@ export default async function PeoplePage({
             </EmptyState>
           )}
         </section>
-        <section
-          id="create-case"
-          className="scroll-mt-8 rounded-xl border border-border bg-surface p-6"
-        >
-          <div className="mb-6 flex items-center gap-3">
-            <Plus className="size-5 text-brand" aria-hidden="true" />
-            <h2 className="font-medium">New offboarding case</h2>
-          </div>
-          <CreateCaseForm />
-        </section>
+        {canManage && (
+          <section
+            id="create-case"
+            className="scroll-mt-8 rounded-xl border border-border bg-surface p-6"
+          >
+            <div className="mb-6 flex items-center gap-3">
+              <Plus className="size-5 text-brand" aria-hidden="true" />
+              <h2 className="font-medium">New offboarding case</h2>
+            </div>
+            <CreateCaseForm />
+          </section>
+        )}
       </div>
     </>
   );

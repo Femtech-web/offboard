@@ -17,7 +17,8 @@ export default async function IntegrationsPage({
 }: {
   searchParams: Promise<{ error?: string }>;
 }) {
-  const { integrations, jobs } = await workspaceRecords();
+  const { integrations, jobs, profile } = await workspaceRecords();
+  const canManage = profile.role === "admin";
   const { error } = await searchParams;
   return (
     <>
@@ -28,10 +29,16 @@ export default async function IntegrationsPage({
       />
       <PageHeading
         title="Integrations"
-        description="Connect the organizations you want to check and review their connection status."
+        description={
+          canManage
+            ? "Connect the organizations you want to check and review their connection status."
+            : "Review the organization connection used for this controlled test."
+        }
       />
       <OperationError error={error} />
-      <div className="grid items-start gap-8 xl:grid-cols-[1fr_340px]">
+      <div
+        className={`grid items-start gap-8 ${canManage ? "xl:grid-cols-[1fr_340px]" : ""}`}
+      >
         <div className="space-y-5">
           {integrations.length ? (
             integrations.map((integration) => (
@@ -102,16 +109,18 @@ export default async function IntegrationsPage({
                     }{" "}
                     pending actions
                   </p>
-                  <form action={connectGitHub}>
-                    <input
-                      type="hidden"
-                      name="organization"
-                      value={integration.organization}
-                    />
-                    <SubmitButton pendingLabel="Queuing…">
-                      Check connection
-                    </SubmitButton>
-                  </form>
+                  {canManage && (
+                    <form action={connectGitHub}>
+                      <input
+                        type="hidden"
+                        name="organization"
+                        value={integration.organization}
+                      />
+                      <SubmitButton pendingLabel="Queuing…">
+                        Check connection
+                      </SubmitButton>
+                    </form>
+                  )}
                 </div>
               </section>
             ))
@@ -135,31 +144,34 @@ export default async function IntegrationsPage({
             </p>
           </section>
         </div>
-        <section className="rounded-xl border border-border bg-surface p-6">
-          <h2 className="font-medium">Add GitHub</h2>
-          <p className="mt-3 text-xs leading-6 text-muted-foreground">
-            Enter an organization you manage that’s enabled for this workspace.
-          </p>
-          <form action={connectGitHub} className="mt-5 space-y-5">
-            <label className="block text-sm">
-              Organization
-              <input
-                name="organization"
-                required
-                maxLength={39}
-                autoCapitalize="none"
-                spellCheck={false}
-                className={inputClassName}
-              />
-            </label>
-            <SubmitButton pendingLabel="Queuing check…">
-              Connect & check
-            </SubmitButton>
-          </form>
-          <p className="mt-6 border-t border-border pt-5 text-xs leading-6 text-muted-foreground">
-            Connecting an organization doesn’t remove anyone’s access.
-          </p>
-        </section>
+        {canManage && (
+          <section className="rounded-xl border border-border bg-surface p-6">
+            <h2 className="font-medium">Add GitHub</h2>
+            <p className="mt-3 text-xs leading-6 text-muted-foreground">
+              Enter an organization you manage that’s enabled for this
+              workspace.
+            </p>
+            <form action={connectGitHub} className="mt-5 space-y-5">
+              <label className="block text-sm">
+                Organization
+                <input
+                  name="organization"
+                  required
+                  maxLength={39}
+                  autoCapitalize="none"
+                  spellCheck={false}
+                  className={inputClassName}
+                />
+              </label>
+              <SubmitButton pendingLabel="Queuing check…">
+                Connect & check
+              </SubmitButton>
+            </form>
+            <p className="mt-6 border-t border-border pt-5 text-xs leading-6 text-muted-foreground">
+              Connecting an organization doesn’t remove anyone’s access.
+            </p>
+          </section>
+        )}
       </div>
     </>
   );

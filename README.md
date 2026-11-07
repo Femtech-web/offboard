@@ -20,9 +20,9 @@ The first connector supports GitHub organization membership and outside-collabor
 
 Built for **Best Business Workflow** in the [Flip the Switch hackathon](https://www.wemakedevs.org/hackathons/switch).
 
-- **See the product:** [open Offboard](https://offboard-mu.vercel.app). The dashboard requires authorized sign-in.
+- **See the product:** [sign in to Offboard](https://offboard-mu.vercel.app/sign-in) with **`test@user.com`** and password **`Password`**. This read-only demo account shows the controlled case and its saved reports.
 - **Follow the workflow:** a human request in the Switch-connected Mattermost room leads to a real GitHub investigation, a private approval email, human approval, removal, an independent check, and the agent’s reply in the same thread.
-- **Inspect the result:** the [saved removal report](https://offboard-mu.vercel.app/reports/5ed69f67-52e5-44a5-a7f5-b362e995b169) is available to the administrator. The build story explains the actual run; the setup guide lets reviewers reproduce it with their own accounts.
+- **Inspect the result:** open the [saved removal report](https://offboard-mu.vercel.app/reports/5ed69f67-52e5-44a5-a7f5-b362e995b169) after signing in. The build story explains the actual run; the setup guide lets reviewers reproduce it with their own accounts.
 
 The complete controlled GitHub journey passed on 7 November 2026. GitHub accepted the removal, the immediate check still found access, and a separate read-only follow-up confirmed the membership absent. Both reports are retained. A later investigation also passed through the hosted app and returned its HTTPS report link in Switch.
 
@@ -124,7 +124,7 @@ The application and persistent records are hosted. Switch, Mattermost, Codex, an
 | Verification receipt email                                       | Template tested; automatic result delivery is planned.                |
 | Vercel access checks, other providers, administrator invitations | Planned.                                                              |
 
-V1 has one configured administrator and a deliberately restricted GitHub test scope. Email may reach Spam. The current GitHub check does not cover enterprise permissions, pending invitations, other organizations, or other services. See the [setup guide](docs/setup.md#authorization-jobs-and-evidence) for operational details.
+V1 has one configured administrator, case-scoped read-only reviewers, and a deliberately restricted GitHub test scope. Email may reach Spam. The current GitHub check does not cover enterprise permissions, pending invitations, other organizations, or other services. See the [setup guide](docs/setup.md#authorization-jobs-and-evidence) for operational details.
 
 ## Development
 
@@ -134,7 +134,7 @@ npm run build       # production build
 npm run db:test     # opt-in PostgreSQL checks; fixtures roll back
 ```
 
-The latest completed validation passed **70 offline tests** and **110 PostgreSQL safety checks**. Hosted checks also confirmed protected routes, separate service permissions, and refusal of unauthorized removal and approval requests. Live provider tests are separate and require explicitly authorized resources.
+The latest completed validation passed **80 offline tests** and **132 PostgreSQL safety checks**. Hosted checks also confirmed protected routes, separate service permissions, and refusal of unauthorized removal and approval requests. Live provider tests are separate and require explicitly authorized resources.
 
 ```text
 src/app/              Routes and four dashboard views

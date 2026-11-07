@@ -89,8 +89,8 @@ export function AuthorizationEvidence({
         </>
       ) : (
         <p className="mt-4 text-sm leading-7 text-muted-foreground">
-          No removal approval is associated with this investigation. An
-          investigation never implies removal.
+          No removal approval is linked to this report. An investigation does
+          not authorize a change.
         </p>
       )}
       {operation ? (

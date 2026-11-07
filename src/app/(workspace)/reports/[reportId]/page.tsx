@@ -9,6 +9,7 @@ import { scanSchema } from "@/core/workflow";
 import { AuthorizationEvidence } from "@/features/reports/authorization-evidence";
 import { InvestigationSource } from "@/features/reports/investigation-source";
 import { jobResultSchema } from "@/core/job-results";
+import { reportAuthorization } from "@/features/reports/report-authorization";
 
 export default async function ReportDetailPage({
   params,
@@ -27,12 +28,7 @@ export default async function ReportDetailPage({
     (record) => record.case_id === report.case_id,
   );
   const job = records.jobs.find((record) => record.id === report.job_id);
-  const operation = records.operations.find(
-    (record) => record.job_id === report.job_id,
-  );
-  const approval = records.approvals.find(
-    (record) => record.id === (operation?.approval_id ?? job?.approval_id),
-  );
+  const { operation, approval } = reportAuthorization(report, records);
   const result = jobResultSchema.safeParse(report.evidence);
   const source =
     result.success && result.data.type === "scan"
