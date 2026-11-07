@@ -1,0 +1,20 @@
+# Local project context; keep out of version control.
+/privates-notes/
+
+# Dependencies and build output
+/node_modules/
+/.next/
+/out/
+/coverage/
+*.tsbuildinfo
+/next-env.d.ts
+
+# Local credentials and integration runtime data
+.env*
+!.env.example
+!.env.switch.example
+/.local/
+
+# Operating system and tooling
+.DS_Store
+*.log

@@ -1,0 +1,69 @@
+{
+  "name": "offboard",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "overrides": {
+    "eslint": {
+      "minimatch": "11.0.1"
+    },
+    "@eslint/config-array": {
+      "minimatch": "11.0.1"
+    },
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "11.0.1"
+    }
+  },
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1",
+    "build": "next build --webpack",
+    "start": "next start --hostname 127.0.0.1",
+    "lint": "eslint . --max-warnings=0",
+    "typecheck": "next typegen && tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm test",
+    "worker": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --import tsx worker/src/index.ts",
+    "worker:run": "npm run worker -- poll",
+    "agent:mcp": "node --import tsx agent/src/server.ts",
+    "db:migrate": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --import tsx scripts/migrate.ts",
+    "worker:doctor": "npm run worker -- doctor",
+    "worker:scan": "npm run worker -- scan-github",
+    "db:test": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --import tsx scripts/test-database.ts",
+    "env:check": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --import tsx scripts/check-environment.ts",
+    "test:live:read-only": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --import tsx tests/integration/read-only-workflow.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "@supabase/ssr": "0.12.7",
+    "@supabase/supabase-js": "2.119.0",
+    "lucide-react": "1.70.0",
+    "next": "16.4.5",
+    "postgres": "4.1.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-email": "6.11.8",
+    "server-only": "0.0.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.3.5",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "eslint": "10.14.0",
+    "eslint-config-next": "16.4.5",
+    "eslint-config-prettier": "10.1.8",
+    "postcss": "8.5.32",
+    "prettier": "3.9.10",
+    "prettier-plugin-tailwindcss": "0.8.1",
+    "tailwindcss": "4.3.5",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0"
+  }
+}
