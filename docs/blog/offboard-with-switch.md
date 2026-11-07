@@ -2,9 +2,11 @@
 
 _Build notes · 7 November 2026 · [Try Offboard](https://offboard-mu.vercel.app)._
 
-When a contractor leaves, deleting an account from a checklist does not establish which permissions remain. Someone still needs to inspect the connected systems, decide which changes are appropriate, and check what happened afterward.
+I have experienced the problem firsthand. After leaving a team, I still had access to its GitHub, Apple, and Vercel accounts. I could still see new code updates after my work there had ended.
 
-We built Offboard for founders, engineering leads, and IT/security administrators who need that evidence. Its first connector checks GitHub organization membership and outside-collaborator access. A Codex agent investigates with the human in a real Switch-connected Mattermost room. The human retains approval, and a restricted worker performs and independently verifies the exact correction.
+A missed offboarding step can leave internal code and company information accessible to someone who no longer needs it. Teams need to find those permissions, remove the right access, and check that the change took effect.
+
+That is why we built Offboard for founders, engineering leads, and IT/security administrators. Its first connector checks GitHub organization membership and outside-collaborator access. A Codex agent investigates with the human in a real Switch-connected Mattermost room. The human approves the exact removal, and Offboard carries it out and independently verifies the result.
 
 Our goal for [Flip the Switch's Best Business Workflow track](https://www.wemakedevs.org/hackathons/switch) is one reproducible collaboration: a person asks about a departure, the agent discovers a real access grant, the person approves its removal, and the team receives a saved result with its limitations intact.
 

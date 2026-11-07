@@ -8,6 +8,8 @@ Act as a product film director, motion designer, and Remotion engineer. Make a c
 
 The audience should understand one practical story: someone leaves, a Codex agent investigates with the human in Switch, the human approves a precise GitHub access removal, and Offboard independently verifies the result. Make the shared conversation and the human decision the centre of the film.
 
+The founder has firsthand experience: after leaving a team, their GitHub, Apple, and Vercel access remained active, and they could still see new code updates. Use this anonymous account as the opening motivation. Explain the practical risk of internal code and company information remaining accessible after a role ends. Offboard helps teams find and remove that access, then verify the outcome. Keep the employer unnamed and use no employer material. Do not add an invented breach, misuse, or financial loss. Apple and Vercel are part of the founder's experience; the working demonstration uses GitHub.
+
 **Target 165 seconds. The entire export must be under 180 seconds, including the end card.** Deliver 1920×1080, 30 fps, H.264 MP4, yuv420p, AAC audio, plus captions. The final video must be uploaded by the owner to YouTube or Loom as public or unlisted.
 
 App: https://offboard-mu.vercel.app
@@ -42,8 +44,8 @@ Include a short closing roadmap beat: **planned integrations for organizations a
 
 | Time      | Scene                     | Essential footage                                                                                                                                                      |
 | --------- | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0–12 s    | The departure             | A short, recognisable problem: a departure is recorded, but an account still has access. Introduce Offboard without a long logo reveal.                                |
-| 12–25 s   | One case                  | The person, departure date, and GitHub account in the real case. Establish the exact organization and permission.                                                      |
+| 0–16 s    | The departure             | The founder's experience: their work ended while GitHub, Apple, and Vercel access remained. Introduce the risk and Offboard's find, remove, verify workflow.           |
+| 16–25 s   | One case                  | The person, departure date, and GitHub account in the real case. Establish the exact organization and permission.                                                      |
 | 25–62 s   | Investigate in Switch     | The human’s actual Mattermost request, Codex participation, real scan progress, and the agent’s saved findings and report link. Show the team conversation clearly.    |
 | 62–94 s   | The human decides         | The proposal email, the exact account and organization, separate identity confirmation where needed, and the human’s approval. Keep the decision visible.              |
 | 94–130 s  | Remove and recheck        | The actual approved change, provider result, and separate verification. If the first check still finds access, show that result before the later successful check.     |
@@ -59,11 +61,11 @@ Use six connected clips. Refine the wording to match the actual edit and the roa
 
 **01 — Problem**
 
-“When someone leaves a company, a completed checklist doesn’t tell you whether their access is actually gone. Offboard helps the team investigate, decide, and verify what happened.”
+“After I left a team, my GitHub, Apple, and Vercel access stayed active. I could still see code updates. Offboard helps teams find forgotten access, remove it with human approval, and verify the result.”
 
 **02 — Case**
 
-“We start with the person leaving and their GitHub account. Each case brings the discovered access and the decisions about it into one place.”
+“We start with the person leaving and their GitHub account. Their case brings the access and decisions together.”
 
 **03 — Switch**
 
@@ -99,6 +101,10 @@ The complete controlled removal already happened. It used `oluwafemi-akolade` in
 | Separate hosted read-only check | Report `ab78d48a-abf6-4c49-8e04-5c06e5c89b90`; 14:50:58 UTC; captured in `docs/images/switch-hosted-investigation.png` |
 
 These are editing references, not on-screen text. Local chat permalinks require the demonstration runtime. The controlled removal happened before deployment; the hosted check is a separate read-only investigation. If using both, make the change of run clear in the edit.
+
+A native UI walkthrough of the completed controlled session is available at `.local/demo-evidence/recordings/2026-11-07-completed-session-walkthrough/offboard-completed-session-walkthrough.mp4`. It shows the real room request, replies, saved evidence, and actual tool activity from that run. The adjacent `capture.json` preserves source-frame timestamps and hashes; `outcome.json` describes the capture. Frames were sampled at approximately 2 fps, with two idle navigation gaps cut for the preview. Use it as a completed-session cutaway with a short “Completed test · 7 November” caption. It is not a capture of fresh agent execution or the full removal flow.
+
+The attempted fresh read-only recording at about 16:37–16:38 Africa/Lagos failed: the real Codex session reported a usage limit with a 19:11 retry time, then a revoked sign-in. No new scan completion was observed. That attempt is archived separately at `.local/demo-evidence/recordings/2026-11-07-switch-read-only/`; do not use it as successful workflow footage. Check agent availability before requesting another live recording.
 
 There is no continuous removal recording yet. Keep raw footage under the ignored `.local/demo-evidence/recordings/` directory and ask for essential captures together:
 

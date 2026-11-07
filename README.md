@@ -4,13 +4,15 @@
 
 **Human-approved access removal, independently verified.**
 
-Offboard helps founders, engineering leads, and IT teams close the gap between a departure checklist and the access someone still has. A Codex agent investigates with your team in Switch. A human approves the exact change. A fresh provider check verifies the result.
+Offboard helps founders, engineering leads, and IT teams find and remove access left behind when someone leaves. A Codex agent investigates with your team in Switch. A human approves the exact change. A fresh provider check verifies the result.
 
 [Live app](https://offboard-mu.vercel.app) · [How we use Switch](#how-we-use-switch) · [Run locally](#run-locally) · [Build story](docs/blog/offboard-with-switch.md)
 
 ## Why Offboard
 
-People leave; permissions can remain. Offboard brings the investigation, decision, and verification into one record, so the team can see what changed and what still needs attention.
+The idea came from firsthand experience: after leaving a team, I still had access to its GitHub, Apple, and Vercel accounts, including visibility into new code updates. My work had ended; my access had not.
+
+That leaves internal code and company information exposed beyond the end of a role. Offboard helps the team discover remaining access, approve and carry out its removal, and check that the change took effect. The investigation, decision, and result stay in one record.
 
 The first connector supports GitHub organization membership and outside-collaborator access. Every finding, approval, removal, and report comes from actual provider checks and saved records.
 
@@ -18,7 +20,7 @@ The first connector supports GitHub organization membership and outside-collabor
 
 Built for **Best Business Workflow** in the [Flip the Switch hackathon](https://www.wemakedevs.org/hackathons/switch).
 
-- **See the product:** [open Offboard](https://offboard-mu.vercel.app). Case data requires administrator sign-in; no shared administrator password is published.
+- **See the product:** [open Offboard](https://offboard-mu.vercel.app). The dashboard requires authorized sign-in.
 - **Follow the workflow:** a human request in the Switch-connected Mattermost room leads to a real GitHub investigation, a private approval email, human approval, removal, an independent check, and the agent’s reply in the same thread.
 - **Inspect the result:** the [saved removal report](https://offboard-mu.vercel.app/reports/5ed69f67-52e5-44a5-a7f5-b362e995b169) is available to the administrator. The build story explains the actual run; the setup guide lets reviewers reproduce it with their own accounts.
 
