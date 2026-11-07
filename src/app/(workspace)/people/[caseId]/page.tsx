@@ -495,7 +495,11 @@ export default async function CaseDetailPage({
                           ? "automatically to refresh a pending email review"
                           : job.request_origin === "verification"
                             ? "for an independent verification"
-                            : "in the dashboard"}
+                            : records.approvals.find(
+                                  (approval) => approval.id === job.approval_id,
+                                )?.authorization_method === "email"
+                              ? "through a private email review"
+                              : "in the dashboard"}
                     </p>
                     {job.error_code && (
                       <p className="mt-2 text-xs text-critical">

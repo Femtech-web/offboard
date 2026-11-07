@@ -566,6 +566,7 @@ try {
       await transaction`select public.offboard_request_scan(${caseId}::uuid,${integrationId}::uuid) as id`;
     await role("postgres");
     await transaction`update public.worker_jobs set created_at='1970-01-01' where id=${emailScan!.id}`;
+    await transaction`update public.access_findings set status='verified_removed',verified_at=now()-interval '30 minutes',last_seen_at=now()-interval '31 minutes' where id=${findingId}`;
     await role("service_role");
     const [emailScanClaim] =
       await transaction`select public.offboard_claim_job(${workerId}::uuid) as job`;
@@ -579,6 +580,12 @@ try {
       limitations: ["Transactional fixture only"],
     };
     await transaction`select public.offboard_finish_job(${emailScan!.id}::uuid,${emailScanClaim!.job.lease_token}::uuid,${transaction.json(emailScanResult)}::jsonb)`;
+    const [rediscovered] =
+      await transaction`select status,verified_at,latest_scan_id from public.access_findings where id=${findingId}`;
+    assert.equal(rediscovered!.status, "access_detected");
+    assert.equal(rediscovered!.verified_at, null);
+    assert.notEqual(rediscovered!.latest_scan_id, savedFinding!.latest_scan_id);
+    checks += 3;
     const [queuedEmail] =
       await transaction`select * from public.approval_email_dispatches where scan_job_id=${emailScan!.id}`;
     assert.ok(queuedEmail);
