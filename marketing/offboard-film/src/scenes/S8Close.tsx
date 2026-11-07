@@ -10,7 +10,7 @@ export const S8Close: React.FC = () => (
       <Reveal at={0.1}>
         <Wordmark scale={1.5} />
       </Reveal>
-      <Reveal at={0.3}>
+      <Reveal at={0.6}>
         <div style={text(76, 500, {marginTop: 70, textAlign: 'center'})}>
           When someone leaves,
           <br />

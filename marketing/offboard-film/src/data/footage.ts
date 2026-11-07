@@ -34,10 +34,10 @@ export const SRC = {
 
 /** On-screen run labels. Short, readable, and honest about which run is shown. */
 export const RUN = {
-  completedTest: 'Completed test · 7 November',
-  thread: 'Switch · Mattermost room · 7 November',
+  completedTest: 'Switch · Mattermost room · completed test, 7 November',
+  thread: 'One thread the whole team can follow · 7 November',
   earlierRun: 'Earlier controlled run · same account · 7 November',
-  records: 'Saved records read back in the thread · times in UTC',
+  records: 'Controlled run, 14:23 UTC · saved records read back in the thread',
   hosted: 'Separate hosted check · read-only · 14:50 UTC',
   dashboard: 'Offboard dashboard · 7 November',
   diagram: 'Summary of saved records · 7 Nov 2026 · UTC',

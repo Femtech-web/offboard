@@ -6,10 +6,10 @@ import {easeOut, Fill, Kicker, ramp, Reveal, Rule, text, useT} from '../primitiv
 // no provider screens and no launch date.
 
 const PLANNED = [
-  {name: 'Vercel', at: 4.1},
-  {name: 'Jira', at: 4.7},
-  {name: 'Trello', at: 5.3},
-  {name: 'Custom sites', at: 6.0},
+  {name: 'Vercel', at: 4.75},
+  {name: 'Jira', at: 5.7},
+  {name: 'Trello', at: 6.6},
+  {name: 'Custom sites', at: 7.1},
 ];
 
 export const S7Roadmap: React.FC = () => {
@@ -34,7 +34,7 @@ export const S7Roadmap: React.FC = () => {
           </div>
         </Reveal>
       </div>
-      <Rule x={left} y={top - 34} w={4 * tileW + 3 * gap} at={3.6} dur={1.0} />
+      <Rule x={left} y={top - 34} w={4 * tileW + 3 * gap} at={4.2} dur={1.0} />
       {PLANNED.map((p, i) => {
         const v = ramp(t, p.at, p.at + 0.45, easeOut);
         return (

@@ -18,11 +18,9 @@ The first connector supports GitHub organization membership and outside-collabor
 
 ## For judges
 
-Built for **Best Business Workflow** in the [Flip the Switch hackathon](https://www.wemakedevs.org/hackathons/switch).
-
 - **See the product:** [sign in to Offboard](https://offboard-mu.vercel.app/sign-in) with **`test@user.com`** and password **`Password`**. This read-only demo account shows the controlled case and its saved reports.
 - **Follow the workflow:** a human request in the Switch-connected Mattermost room leads to a real GitHub investigation, a private approval email, human approval, removal, an independent check, and the agent’s reply in the same thread.
-- **Inspect the result:** open the [saved removal report](https://offboard-mu.vercel.app/reports/5ed69f67-52e5-44a5-a7f5-b362e995b169) after signing in. The build story explains the actual run; the setup guide lets reviewers reproduce it with their own accounts.
+- **Inspect the result:** read the [GitHub run, step by step](docs/github-run.md), including the real Switch conversation, human decision, provider response, and both verification results. No sign-in is needed for the walkthrough.
 
 The complete controlled GitHub journey passed on 7 November 2026. GitHub accepted the removal, the immediate check still found access, and a separate read-only follow-up confirmed the membership absent. Both reports are retained. A later investigation also passed through the hosted app and returned its HTTPS report link in Switch.
 

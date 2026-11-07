@@ -54,14 +54,14 @@ const AccessRow: React.FC<{name: string; at: number; y: number}> = ({name, at, y
 };
 
 const STEPS = [
-  {x: 420, title: 'Find', detail: 'forgotten access', at: 10.0},
-  {x: 960, title: 'Remove', detail: 'with human approval', at: 12.5},
-  {x: 1500, title: 'Verify', detail: 'the result', at: 14.3},
+  {x: 420, title: 'Find', detail: 'forgotten access', at: 9.9},
+  {x: 960, title: 'Remove', detail: 'with human approval', at: 11.65},
+  {x: 1500, title: 'Verify', detail: 'the result', at: 14.0},
 ];
 
 export const S1Departure: React.FC = () => {
   const t = useT();
-  const partOne = 1 - ramp(t, 9.0, 9.5);
+  const partOne = 1 - ramp(t, 7.95, 8.4);
   const lineY = 640;
   return (
     <Fill style={{background: color.bg}}>
@@ -77,25 +77,25 @@ export const S1Departure: React.FC = () => {
           <Reveal at={1.3}>
             <div style={text(96, 500, {color: color.lavender})}>My access didn’t.</div>
           </Reveal>
-          <Reveal at={6.0}>
+          <Reveal at={6.2}>
             <div style={text(34, 400, {color: color.muted, marginTop: 48, lineHeight: 1.35, width: 760})}>
               New code updates kept arriving. Internal code and company information stayed open after the role ended.
             </div>
           </Reveal>
         </div>
         {ACCESS.map((name, i) => (
-          <AccessRow key={name} name={name} at={1.9 + i * 0.6} y={300 + i * 136} />
+          <AccessRow key={name} name={name} at={[2.35, 2.85, 3.4][i]} y={300 + i * 136} />
         ))}
       </Fill>
 
       {/* Part two: what Offboard does */}
-      <Fill style={{opacity: ramp(t, 9.4, 9.9)}}>
+      <Fill style={{opacity: ramp(t, 8.3, 8.7)}}>
         <div style={{position: 'absolute', left: 0, right: 0, top: 300, display: 'flex', justifyContent: 'center'}}>
-          <Reveal at={9.5}>
+          <Reveal at={8.4}>
             <Wordmark scale={1.35} />
           </Reveal>
         </div>
-        <Rule x={260} y={lineY} w={1400} at={9.9} dur={1.2} />
+        <Rule x={260} y={lineY} w={1400} at={8.9} dur={1.2} />
         {/* The line continues off the right edge into the next chapter's wipe. */}
         <Rule x={1660} y={lineY} w={260} at={15.2} dur={0.6} />
         {STEPS.map((s) => {

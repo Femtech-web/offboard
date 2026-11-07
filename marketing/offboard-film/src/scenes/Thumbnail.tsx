@@ -20,8 +20,8 @@ export const Thumbnail: React.FC = () => (
       <Shot
         src={SRC.request}
         panel
-        box={{x: 1080, y: 250, w: 760, h: 580}}
-        cams={[{at: 0, x: 1250, y: 860, w: 1460}]}
+        box={{x: 1040, y: 230, w: 1150, h: 660}}
+        cams={[{at: 0, x: 1250, y: 590, w: 1520}]}
         marks={[{x: 1304, y: 1137, w: 1390, h: 42, from: 0}]}
       />
     </AbsoluteFill>

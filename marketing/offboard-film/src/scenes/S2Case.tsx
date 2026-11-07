@@ -28,7 +28,7 @@ export const S2Case: React.FC = () => {
           {FACTS.map((f, i) => {
             const at = 1.6 + i * 0.45;
             const p = ramp(t, at, at + 0.45, easeOut);
-            const line = f.tracked ? ramp(t, 3.4, 4.2, easeOut) : 0;
+            const line = f.tracked ? ramp(t, 2.7, 3.5, easeOut) : 0;
             return (
               <div key={f.label} style={{opacity: p, transform: `translateY(${(1 - p) * 12}px)`, marginBottom: 26, position: 'relative'}}>
                 <div style={text(22, 500, {color: color.muted})}>{f.label}</div>
@@ -49,9 +49,9 @@ export const S2Case: React.FC = () => {
         enter={0.5}
         cams={[
           {at: 0.9, x: 10, y: 0, w: 1480},
-          {at: 3.4, x: 10, y: 600, w: 1000},
+          {at: 3.6, x: 10, y: 600, w: 1000},
         ]}
-        marks={[{x: 30, y: 800, w: 950, h: 112, from: 4.0}]}
+        marks={[{x: 30, y: 800, w: 950, h: 112, from: 4.15}]}
       />
       <RunLabel label={RUN.dashboard} x={860} y={120} at={0.8} />
     </Fill>

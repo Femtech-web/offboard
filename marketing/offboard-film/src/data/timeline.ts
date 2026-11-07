@@ -47,8 +47,10 @@ export const VOICE: {id: PieceId; at: number}[] = [
   {id: '06c', at: 148.4},
 ];
 
-// Phrase captions. Wording is the script the founder read, checked against a local
-// whisper.cpp transcript; phrase start/end are measured pauses in the ORIGINAL clip
+// Phrase captions. Wording is the script the founder read, checked against local
+// whisper.cpp transcripts (base.en and small.en); where both models heard a different
+// small word ("a proposed removal", "the organization's"), the caption follows the
+// recording; phrase start/end are measured pauses in the ORIGINAL clip
 // (ffmpeg silencedetect, -38 dB). No word-level alignment is invented.
 const PHRASES: Record<PieceId, [number, number, string][]> = {
   '01': [
@@ -72,7 +74,7 @@ const PHRASES: Record<PieceId, [number, number, string][]> = {
     [13.39, 14.88, 'and explains the access it found.'],
   ],
   '03d': [[15.5, 18.08, 'The team can follow that investigation in the same thread.']],
-  '04a': [[0.63, 2.93, 'Offboard sends the proposed removal to my email.']],
+  '04a': [[0.63, 2.93, 'Offboard sends a proposed removal to my email.']],
   '04b': [
     [3.75, 7.59, 'I review the account, organization, and exact permission,'],
     [7.88, 9.35, 'then make the decision myself.'],
@@ -93,7 +95,7 @@ const PHRASES: Record<PieceId, [number, number, string][]> = {
   ],
   '06a': [[0.49, 3.37, 'The agent brings the saved result back to the room.']],
   '06b': [
-    [4.11, 7.45, 'Next, we plan to support more of your organization’s tools:'],
+    [4.11, 7.45, 'Next, we plan to support more of the organization’s tools:'],
     [8.13, 11.27, 'Vercel, Jira, Trello, and custom sites.'],
   ],
   '06c': [[11.91, 14.58, 'When someone leaves, prove their access is gone.']],

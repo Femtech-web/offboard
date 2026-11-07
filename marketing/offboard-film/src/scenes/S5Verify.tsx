@@ -10,23 +10,23 @@ import {easeOut, Fill, Kicker, ramp, Reveal, RunLabel, Shot, text, useT} from '.
 const FULL = {x: 0, y: 0, w: W, h: H};
 
 const NODES: {x: number; time: string; title: string; detail: string; tone: Tone; at: number}[] = [
-  {x: 300, time: '14:23:44', title: 'Human approved', detail: 'Administrator, by email', tone: 'lavender', at: 25.6},
-  {x: 740, time: '14:23:48', title: 'GitHub accepted', detail: 'Removal request returned 204', tone: 'lavender', at: 26.4},
-  {x: 1180, time: '14:23:50', title: 'First check', detail: 'Access remains', tone: 'attention', at: 27.2},
-  {x: 1620, time: '14:23:58', title: 'Follow-up check', detail: 'Verified removed', tone: 'success', at: 28.0},
+  {x: 300, time: '14:23:44', title: 'Human approved', detail: 'Administrator, by email', tone: 'lavender', at: 21.1},
+  {x: 740, time: '14:23:48', title: 'GitHub accepted', detail: 'Removal request returned 204', tone: 'lavender', at: 21.8},
+  {x: 1180, time: '14:23:50', title: 'First check', detail: 'Access remains', tone: 'attention', at: 22.5},
+  {x: 1620, time: '14:23:58', title: 'Follow-up check', detail: 'Verified removed', tone: 'success', at: 23.2},
 ];
 
 const Timeline: React.FC = () => {
   const t = useT();
   const y = 560;
-  const line = ramp(t, 25.3, 28.4, easeOut);
+  const line = ramp(t, 20.9, 23.6, easeOut);
   return (
     <Fill style={{background: color.bg}}>
       <div style={{position: 'absolute', left: 120, top: 170}}>
-        <Reveal at={25.1}>
+        <Reveal at={20.6}>
           <Kicker>One report, both results</Kicker>
         </Reveal>
-        <Reveal at={25.3}>
+        <Reveal at={20.8}>
           <div style={text(64, 500, {marginTop: 18})}>The first check is kept, not overwritten.</div>
         </Reveal>
       </div>
@@ -62,7 +62,7 @@ const Timeline: React.FC = () => {
           </React.Fragment>
         );
       })}
-      <Reveal at={29.6}>
+      <Reveal at={24.6}>
         <div style={{position: 'absolute', left: 120, top: 790, width: 1300, ...text(30, 400, {color: color.muted, lineHeight: 1.4})}}>
           The report records the approver, the provider response, the immediate check and the follow-up. The original access-remains report stays unchanged.
         </div>
@@ -75,38 +75,38 @@ export const S5Verify: React.FC = () => {
   const t = useT();
   return (
     <Fill style={{background: color.bg}}>
-      {t < 6.0 ? (
+      {t < 6.2 ? (
         <Shot
           src={SRC.summary}
           box={FULL}
           cams={[{at: 0, x: 1230, y: 300, w: 1560}]}
-          marks={[{x: 1304, y: 612, w: 1416, h: 184, from: 1.2}]}
+          marks={[{x: 1304, y: 612, w: 1416, h: 184, from: 1.0}]}
         />
       ) : null}
 
-      {t >= 6.0 && t < 25.0 ? (
+      {t >= 6.2 && t < 20.5 ? (
         <Shot
           src={SRC.confirmation}
           box={FULL}
           cams={[
-            {at: 6.0, x: 1250, y: 330, w: 1500},
-            {at: 11.8, x: 1250, y: 330, w: 1500},
-            {at: 12.8, x: 1250, y: 470, w: 1500},
-            {at: 18.6, x: 1250, y: 470, w: 1500},
-            {at: 19.6, x: 1250, y: 560, w: 1500},
+            {at: 6.2, x: 1250, y: 330, w: 1500},
+            {at: 9.5, x: 1250, y: 330, w: 1500},
+            {at: 10.2, x: 1250, y: 470, w: 1500},
+            {at: 13.9, x: 1250, y: 470, w: 1500},
+            {at: 14.6, x: 1250, y: 560, w: 1500},
           ]}
           marks={[
-            {x: 1304, y: 528, w: 1416, h: 186, from: 6.6, to: 12.2},
-            {x: 1304, y: 714, w: 1416, h: 106, from: 12.8, to: 18.8, tone: 'attention'},
-            {x: 1304, y: 820, w: 1416, h: 226, from: 19.4, tone: 'success'},
+            {x: 1304, y: 528, w: 1416, h: 186, from: 8.1, to: 10.0},
+            {x: 1304, y: 714, w: 1416, h: 106, from: 10.3, to: 14.2, tone: 'attention'},
+            {x: 1304, y: 820, w: 1416, h: 226, from: 15.0, tone: 'success'},
           ]}
         />
       ) : null}
 
-      {t >= 25.0 ? <Timeline /> : null}
+      {t >= 20.5 ? <Timeline /> : null}
 
-      <RunLabel label={RUN.records} at={0.3} until={25.0} />
-      <RunLabel label={RUN.diagram} at={25.4} />
+      <RunLabel label={RUN.records} at={0.3} until={20.5} />
+      <RunLabel label={RUN.diagram} at={20.9} />
     </Fill>
   );
 };
